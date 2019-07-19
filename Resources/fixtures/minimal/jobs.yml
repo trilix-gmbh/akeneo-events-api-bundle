@@ -1,0 +1,6 @@
+jobs:
+    deliver_outer_event_to_consumer:
+        connector: internal
+        alias:     deliver_outer_event_to_consumer
+        label:     Deliver outer event to consumer
+        type:      deliver_outer_event_to_consumer

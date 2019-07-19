@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.0/phpunit.xsd"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Trilix Events API Unit Tests">
+            <directory suffix="Test.php">Tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <ini name="xdebug.max_nesting_level" value="200"/>
+    </php>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true" processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">*</directory>
+            <exclude>
+                <directory>Tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+<!--    <logging>-->
+<!--        <log type="coverage-html" target="test-reports/coverage" charset="UTF-8" yui="true" highlight="true"/>-->
+<!--    </logging>-->
+</phpunit>

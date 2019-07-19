@@ -1,0 +1,52 @@
+parameters:
+    pim_events_api.job.job_parameters.constraint_collection_provider.deliver_outer_event_to_consumer.class: Trilix\EventsApiBundle\Job\JobParameters\DeliverOuterEventToConsumerConstraintCollectionProvider
+    pim_events_api.tasklet.deliver_outer_event_to_consumer.class: Trilix\EventsApiBundle\Job\DeliverOuterEventToConsumerTasklet
+    pim_events_api.deliver_outer_event_to_consumer.job_type: 'deliver_outer_event_to_consumer'
+    pim_events_api.deliver_outer_event_to_consumer.job_name: 'deliver_outer_event_to_consumer'
+    pim_events_api.deliver_outer_event_to_consumer.tasklet_name: 'deliver_outer_event_to_consumer'
+    pim_events_api.deliver_outer_event_to_consumer.connector_name: 'deliver_outer_event_to_consumer'
+
+services:
+    pim_events_api.job.job_parameters.constraint_collection_provider.deliver_outer_event_to_consumer:
+        class: '%pim_events_api.job.job_parameters.constraint_collection_provider.deliver_outer_event_to_consumer.class%'
+        tags:
+            - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }
+
+    pim_events_api.job.job_parameters.default_values_provider.deliver_outer_event_to_consumer:
+        class: '%akeneo_batch.job.job_parameters.empty_values_provider.class%'
+        arguments:
+            -
+                - '%pim_events_api.deliver_outer_event_to_consumer.job_name%'
+        tags:
+            - { name: akeneo_batch.job.job_parameters.default_values_provider }
+
+    pim_events_api.tasklet.deliver_outer_event_to_consumer:
+        class: '%pim_events_api.tasklet.deliver_outer_event_to_consumer.class%'
+        arguments:
+            - '@pim_events_api.events_api_application_provider.default'
+            - '@pim_events_api.guzzle.http_client_factory'
+        public: false
+
+    pim_events_api.step.deliver_outer_event_to_consumer:
+        class: '%pim_connector.step.tasklet.class%'
+        arguments:
+            - '%pim_events_api.deliver_outer_event_to_consumer.tasklet_name%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@pim_events_api.tasklet.deliver_outer_event_to_consumer'
+        public: false
+
+    pim_events_api.job.deliver_outer_event_to_consumer:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - '%pim_events_api.deliver_outer_event_to_consumer.job_name%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@pim_events_api.step.deliver_outer_event_to_consumer'
+        public: false
+        tags:
+            -
+                name: akeneo_batch.job
+                connector: '%pim_events_api.deliver_outer_event_to_consumer.connector_name%'
+                type: '%pim_events_api.deliver_outer_event_to_consumer.job_type%'
