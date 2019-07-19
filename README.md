@@ -1,0 +1,1 @@
+# akeneo-events-api-bundle
