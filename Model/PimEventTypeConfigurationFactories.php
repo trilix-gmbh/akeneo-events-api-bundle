@@ -111,7 +111,7 @@ class PimEventTypeConfigurationFactories
     public static function familyCreatedEventTypeConfiguration(CreateEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
     {
         return new EventTypeConfiguration(
-            EntityEventTypes::ATTRIBUTE_CREATED,
+            EntityEventTypes::FAMILY_CREATED,
             static function (GenericEventInterface $event) {
                 return $event->getSubject() instanceof FamilyInterface && $event instanceof GenericCreateEntityEventInterface;
             },
@@ -126,7 +126,7 @@ class PimEventTypeConfigurationFactories
     public static function familyUpdatedEventTypeConfiguration(CreateEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
     {
         return new EventTypeConfiguration(
-            EntityEventTypes::ATTRIBUTE_UPDATED,
+            EntityEventTypes::FAMILY_UPDATED,
             static function (GenericEventInterface $event) {
                 return $event->getSubject() instanceof FamilyInterface && $event instanceof GenericUpdateEntityEventInterface;
             },
@@ -141,7 +141,7 @@ class PimEventTypeConfigurationFactories
     public static function familyRemovedEventTypeConfiguration(CreateEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
     {
         return new EventTypeConfiguration(
-            EntityEventTypes::ATTRIBUTE_REMOVED,
+            EntityEventTypes::FAMILY_REMOVED,
             static function (GenericEventInterface $event) {
                 return $event->getSubject() instanceof FamilyInterface && $event instanceof GenericRemoveEntityEventInterface;
             },
