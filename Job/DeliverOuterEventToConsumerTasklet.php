@@ -60,6 +60,7 @@ class DeliverOuterEventToConsumerTasklet implements TaskletInterface
             $client->send(json_encode($event));
         } catch (HttpClientException $e) {
             $this->logger->error($e->getMessage());
+            throw $e;
         }
     }
 }

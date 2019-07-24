@@ -76,7 +76,7 @@ class DeliverOuterEventToConsumerTaskletTest extends TestCase
     /**
      * @test
      */
-    public function testExecuteWhenExceptionIsCatched(): void
+    public function expectedExceptionIsRaised(): void
     {
         /** @var HttpClientInterface|MockObject $httpClient */
         $httpClient = $this->getMockBuilder(HttpClientInterface::class)->getMock();
@@ -89,10 +89,13 @@ class DeliverOuterEventToConsumerTaskletTest extends TestCase
         $httpClient->expects($this->once())->method('send')
             ->with($this->isJson())->will($this->throwException(new HttpClientException('testMessage')));
 
+        $this->tasklet->setStepExecution($this->createStepExecution(new JobParameters(['event' => $event])));
+
         $this->logger->expects($this->once())->method('error')
             ->with('testMessage');
 
-        $this->tasklet->setStepExecution($this->createStepExecution(new JobParameters(['event' => $event])));
+        $this->expectException(HttpClientException::class);
+        $this->expectExceptionMessage('testMessage');
 
         $this->tasklet->execute();
     }

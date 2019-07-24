@@ -56,7 +56,7 @@ class EventsHandler
                 ->build($eventType->getName());
             $this->outerEventDispatcher->dispatch($outerEvent);
         } catch (IsNotSupportedEventException $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->notice($e->getMessage());
         }
     }
 }

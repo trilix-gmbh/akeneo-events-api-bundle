@@ -114,6 +114,42 @@ class AkeneoStorageUtilsSubscriberTest extends TestCase
 
         $this->subscriber->postRemove(new RemoveEvent($subject, 7, ['foo' => 'bar']));
     }
+
+    /**
+     * @test
+     */
+    public function expectedExceptionIsCatchedDuringPostSave(): void
+    {
+        $subject = new VersionableObject(4);
+
+        $postSaveEvent = new GenericEvent($subject, ['bar' => 'foo']);
+
+        $this->eventsHandler->expects($this->once())->method('handle')
+            ->willThrowException(new \Exception('testMessage'));
+
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->with('testMessage');
+
+        $this->subscriber->postSave($postSaveEvent);
+    }
+
+    /**
+     * @test
+     */
+    public function expectedExceptionIsCatchedDuringPostRemove(): void
+    {
+        $subject = new VersionableObject(7);
+
+        $this->eventsHandler->expects($this->once())->method('handle')
+            ->willThrowException(new \Exception('testMessage'));
+
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->with('testMessage');
+
+        $this->subscriber->postRemove(new RemoveEvent($subject, 7, ['foo' => 'bar']));
+    }
 }
 
 class VersionableObject implements VersionableInterface
