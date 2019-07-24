@@ -6,6 +6,7 @@ namespace Trilix\EventsApiBundle\Tests\Unit\Model;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Trilix\EventsApiBundle\EventType\EventType;
 use Trilix\EventsApiBundle\Model\ResolveEventType;
@@ -30,14 +31,18 @@ class GenericEventsHandlerTest extends TestCase
     /** @var EventsHandler */
     private $handler;
 
+    /** @var LoggerInterface|MockObject */
+    private $logger;
+
     protected function setUp()
     {
         parent::setUp();
         $this->resolver = $this->getMockBuilder(ResolveEventType::class)->disableOriginalConstructor()->getMock();
         $this->builder = $this->getMockBuilder(OuterEventBuilder::class)->disableOriginalConstructor()->getMock();
         $this->dispatcher = $this->getMockBuilder(OuterEventDispatcherInterface::class)->getMock();
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
-        $this->handler = new EventsHandler($this->resolver, $this->builder, $this->dispatcher);
+        $this->handler = new EventsHandler($this->resolver, $this->builder, $this->dispatcher, $this->logger);
     }
 
     /**

@@ -6,6 +6,7 @@ namespace Trilix\EventsApiBundle\Job;
 
 use Akeneo\Tool\Component\Batch\Model\StepExecution;
 use Akeneo\Tool\Component\Connector\Step\TaskletInterface;
+use Psr\Log\LoggerInterface;
 use Trilix\EventsApiBundle\HttpClient\Exception as HttpClientException;
 use Trilix\EventsApiBundle\HttpClient\HttpClientFactoryInterface;
 use Trilix\EventsApiBundle\Model\EventsApiApplicationProviderInterface;
@@ -21,6 +22,9 @@ class DeliverOuterEventToConsumerTasklet implements TaskletInterface
     /** @var StepExecution */
     private $stepExecution;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     /**
      * DeliverOuterEventToConsumerTasklet constructor.
      * @param EventsApiApplicationProviderInterface $eventsApiApplicationProvider
@@ -28,10 +32,12 @@ class DeliverOuterEventToConsumerTasklet implements TaskletInterface
      */
     public function __construct(
         EventsApiApplicationProviderInterface $eventsApiApplicationProvider,
-        HttpClientFactoryInterface $httpClientFactory
+        HttpClientFactoryInterface $httpClientFactory,
+        LoggerInterface $logger
     ) {
         $this->eventsApiApplicationProvider = $eventsApiApplicationProvider;
         $this->httpClientFactory = $httpClientFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -53,8 +59,7 @@ class DeliverOuterEventToConsumerTasklet implements TaskletInterface
         try {
             $client->send(json_encode($event));
         } catch (HttpClientException $e) {
-            // TODO log
-            throw $e;
+            $this->logger->error($e->getMessage());
         }
     }
 }

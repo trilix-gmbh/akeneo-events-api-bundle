@@ -21,6 +21,7 @@ services:
         class: '%pim_events_api.event_subscriber.akeneo_storage_utils_subscriber.class%'
         arguments:
             - '@pim_events_api.events_handler'
+            - '@logger'
         tags:
             - { name: kernel.event_subscriber, priority: -255 }
 
@@ -38,6 +39,7 @@ services:
             - '@pim_events_api.resolve_event_type'
             - '@pim_events_api.outer_event_builder'
             - '@pim_events_api.akeneo_batch_outer_event_dispatcher'
+            - '@logger'
 
     pim_events_api.resolve_event_type:
         class: '%pim_events_api.resolve_event_type.class%'

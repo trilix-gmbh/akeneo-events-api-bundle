@@ -25,6 +25,7 @@ services:
         arguments:
             - '@pim_events_api.events_api_application_provider.default'
             - '@pim_events_api.guzzle.http_client_factory'
+            - '@logger'
         public: false
 
     pim_events_api.step.deliver_outer_event_to_consumer:

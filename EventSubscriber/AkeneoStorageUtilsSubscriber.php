@@ -7,6 +7,7 @@ namespace Trilix\EventsApiBundle\EventSubscriber;
 use Akeneo\Tool\Component\StorageUtils\Event\RemoveEvent;
 use Akeneo\Tool\Component\StorageUtils\StorageEvents;
 use Akeneo\Tool\Component\Versioning\Model\VersionableInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Throwable;
@@ -24,13 +25,18 @@ class AkeneoStorageUtilsSubscriber implements EventSubscriberInterface
     /** @var array */
     private $entitiesToBeCreated;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     /**
      * AkeneoStorageUtilsSubscriber constructor.
      * @param EventsHandler $handler
+     * @param LoggerInterface $logger
      */
-    public function __construct(EventsHandler $handler)
+    public function __construct(EventsHandler $handler, LoggerInterface $logger)
     {
         $this->handler = $handler;
+        $this->logger  = $logger;
         $this->entitiesToBeCreated = [];
     }
 
@@ -94,7 +100,7 @@ class AkeneoStorageUtilsSubscriber implements EventSubscriberInterface
         try {
             $this->handler->handle($event);
         } catch (Throwable $e) {
-            // TODO Log
+            $this->logger->error($e->getMessage());
         }
     }
 }
