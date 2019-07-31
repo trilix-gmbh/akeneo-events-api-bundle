@@ -7,8 +7,6 @@ All you need is PIM Events API Bundle and an endpoint where to send Akeneo PIM e
 * [Getting Started](#Getting-Started)
 * [Functionality](#Functionality)
 * [Roadmap](#Roadmap)
-* [Contributing](#Contributing)
-* [About us](#About-us)
 * [License](#License)
 
 ## Getting Started
