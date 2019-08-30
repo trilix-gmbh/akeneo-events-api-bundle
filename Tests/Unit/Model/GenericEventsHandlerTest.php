@@ -6,6 +6,7 @@ namespace Trilix\EventsApiBundle\Tests\Unit\Model;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Trilix\EventsApiBundle\EventType\EventType;
 use Trilix\EventsApiBundle\Model\ResolveEventType;
@@ -30,22 +31,27 @@ class GenericEventsHandlerTest extends TestCase
     /** @var EventsHandler */
     private $handler;
 
+    /** @var LoggerInterface|MockObject */
+    private $logger;
+
     protected function setUp()
     {
         parent::setUp();
         $this->resolver = $this->getMockBuilder(ResolveEventType::class)->disableOriginalConstructor()->getMock();
         $this->builder = $this->getMockBuilder(OuterEventBuilder::class)->disableOriginalConstructor()->getMock();
         $this->dispatcher = $this->getMockBuilder(OuterEventDispatcherInterface::class)->getMock();
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
-        $this->handler = new EventsHandler($this->resolver, $this->builder, $this->dispatcher);
+        $this->handler = new EventsHandler($this->resolver, $this->builder, $this->dispatcher, $this->logger);
     }
 
     /**
      * @test
-     * @expectedException \Assert\InvalidArgumentException
      */
     public function throwsInvalidArgumentExceptionIfGenericEventSubjectIsNotObject(): void
     {
+        $this->expectException(\Assert\InvalidArgumentException::class);
+
         $this->handler->handle(
             new class implements GenericEventInterface {
                 public function getSubject()
@@ -69,14 +75,17 @@ class GenericEventsHandlerTest extends TestCase
         };
 
         $this->resolver->expects($this->once())->method('__invoke')
-            ->with($event)->willThrowException(new IsNotSupportedEventException());
+            ->with($event)->willThrowException(new IsNotSupportedEventException('testMessage'));
+
+        $this->logger->expects($this->once())
+            ->method('notice')
+            ->with('testMessage');
 
         $this->handler->handle($event);
     }
 
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function passesThrownExceptionNext(): void
     {
@@ -88,7 +97,13 @@ class GenericEventsHandlerTest extends TestCase
         };
 
         $this->resolver->expects($this->once())->method('__invoke')
-            ->with($event)->willThrowException(new RuntimeException());
+            ->with($event)->willThrowException(new RuntimeException('testMessage'));
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('testMessage');
+
+        $this->logger->expects($this->never())
+            ->method('notice');
 
         $this->handler->handle($event);
     }
@@ -118,6 +133,9 @@ class GenericEventsHandlerTest extends TestCase
             ->with('test_outer_event')->will($this->returnValue($outerEvent));
 
         $this->dispatcher->expects($this->once())->method('dispatch')->with($outerEvent);
+
+        $this->logger->expects($this->never())
+            ->method('notice');
 
         $this->handler->handle($event);
     }

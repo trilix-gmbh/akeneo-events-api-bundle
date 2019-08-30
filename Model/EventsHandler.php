@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Trilix\EventsApiBundle\Model;
 
 use Assert\Assert;
+use Psr\Log\LoggerInterface;
 use Trilix\EventsApiBundle\OuterEvent\OuterEventBuilder;
 
 class EventsHandler
@@ -18,20 +19,26 @@ class EventsHandler
     /** @var OuterEventDispatcherInterface */
     private $outerEventDispatcher;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     /**
      * EventsHandler constructor.
      * @param ResolveEventType $resolveEventType
      * @param OuterEventBuilder $outerEventBuilder
      * @param OuterEventDispatcherInterface $eventDispatcher
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResolveEventType $resolveEventType,
         OuterEventBuilder $outerEventBuilder,
-        OuterEventDispatcherInterface $eventDispatcher
+        OuterEventDispatcherInterface $eventDispatcher,
+        LoggerInterface $logger
     ) {
         $this->resolveEventType = $resolveEventType;
         $this->outerEventBuilder = $outerEventBuilder;
         $this->outerEventDispatcher = $eventDispatcher;
+        $this->logger = $logger;
     }
 
     /**
@@ -49,7 +56,7 @@ class EventsHandler
                 ->build($eventType->getName());
             $this->outerEventDispatcher->dispatch($outerEvent);
         } catch (IsNotSupportedEventException $e) {
-            // log
+            $this->logger->notice($e->getMessage());
         }
     }
 }

@@ -8,6 +8,7 @@ use Akeneo\Tool\Component\StorageUtils\Event\RemoveEvent;
 use Akeneo\Tool\Component\Versioning\Model\VersionableInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Trilix\EventsApiBundle\EventSubscriber\AkeneoStorageUtilsSubscriber;
 use Trilix\EventsApiBundle\Model\GenericCreateEntityEventInterface;
@@ -23,13 +24,18 @@ class AkeneoStorageUtilsSubscriberTest extends TestCase
     /** @var EventsHandler|MockObject */
     private $eventsHandler;
 
+    /** @var LoggerInterface|MockObject */
+    private $logger;
+
     protected function setUp()
     {
         parent::setUp();
         $this->eventsHandler = $this->getMockBuilder(EventsHandler::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->subscriber = new AkeneoStorageUtilsSubscriber($this->eventsHandler);
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
+        $this->subscriber = new AkeneoStorageUtilsSubscriber($this->eventsHandler, $this->logger);
     }
 
     /**
@@ -105,6 +111,42 @@ class AkeneoStorageUtilsSubscriberTest extends TestCase
                     )
                 )
             );
+
+        $this->subscriber->postRemove(new RemoveEvent($subject, 7, ['foo' => 'bar']));
+    }
+
+    /**
+     * @test
+     */
+    public function expectedExceptionIsCatchedDuringPostSave(): void
+    {
+        $subject = new VersionableObject(4);
+
+        $postSaveEvent = new GenericEvent($subject, ['bar' => 'foo']);
+
+        $this->eventsHandler->expects($this->once())->method('handle')
+            ->willThrowException(new \Exception('testMessage'));
+
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->with('testMessage');
+
+        $this->subscriber->postSave($postSaveEvent);
+    }
+
+    /**
+     * @test
+     */
+    public function expectedExceptionIsCatchedDuringPostRemove(): void
+    {
+        $subject = new VersionableObject(7);
+
+        $this->eventsHandler->expects($this->once())->method('handle')
+            ->willThrowException(new \Exception('testMessage'));
+
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->with('testMessage');
 
         $this->subscriber->postRemove(new RemoveEvent($subject, 7, ['foo' => 'bar']));
     }

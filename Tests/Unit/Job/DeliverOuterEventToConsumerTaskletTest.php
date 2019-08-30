@@ -10,6 +10,7 @@ use Akeneo\Tool\Component\Batch\Model\StepExecution;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use Trilix\EventsApiBundle\HttpClient\Exception as HttpClientException;
 use Trilix\EventsApiBundle\HttpClient\HttpClientFactoryInterface;
 use Trilix\EventsApiBundle\HttpClient\HttpClientInterface;
@@ -25,6 +26,9 @@ class DeliverOuterEventToConsumerTaskletTest extends TestCase
     /** @var HttpClientFactoryInterface|MockObject $httpClientFactory */
     private $httpClientFactory;
 
+    /** @var LoggerInterface|MockObject */
+    private $logger;
+
     /** @var DeliverOuterEventToConsumerTasklet */
     private $tasklet;
 
@@ -33,12 +37,17 @@ class DeliverOuterEventToConsumerTaskletTest extends TestCase
         parent::setUp();
         $this->applicationProvider = $this->getMockBuilder(EventsApiApplicationProviderInterface::class)->getMock();
         $this->httpClientFactory = $this->getMockBuilder(HttpClientFactoryInterface::class)->getMock();
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $application = new EventsApiApplication('foo', 'http://bar.com');
 
         $this->applicationProvider->expects($this->once())->method('retrieve')->will($this->returnValue($application));
 
-        $this->tasklet = new DeliverOuterEventToConsumerTasklet($this->applicationProvider, $this->httpClientFactory);
+        $this->tasklet = new DeliverOuterEventToConsumerTasklet(
+            $this->applicationProvider,
+            $this->httpClientFactory,
+            $this->logger
+        );
     }
 
     /**
@@ -66,9 +75,8 @@ class DeliverOuterEventToConsumerTaskletTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Trilix\EventsApiBundle\HttpClient\Exception
      */
-    public function rethrowsExceptions(): void
+    public function expectedExceptionIsRaised(): void
     {
         /** @var HttpClientInterface|MockObject $httpClient */
         $httpClient = $this->getMockBuilder(HttpClientInterface::class)->getMock();
@@ -79,9 +87,15 @@ class DeliverOuterEventToConsumerTaskletTest extends TestCase
             ->with('http://bar.com')->will($this->returnValue($httpClient));
 
         $httpClient->expects($this->once())->method('send')
-            ->with($this->isJson())->will($this->throwException(new HttpClientException()));
+            ->with($this->isJson())->will($this->throwException(new HttpClientException('testMessage')));
 
         $this->tasklet->setStepExecution($this->createStepExecution(new JobParameters(['event' => $event])));
+
+        $this->logger->expects($this->once())->method('error')
+            ->with('testMessage');
+
+        $this->expectException(HttpClientException::class);
+        $this->expectExceptionMessage('testMessage');
 
         $this->tasklet->execute();
     }
