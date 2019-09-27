@@ -51,11 +51,14 @@ class EventsHandler
 
         try {
             $eventType = $this->resolveEventType->__invoke($event);
+            if (!$eventType) {
+                return;
+            }
             $outerEvent = $this->outerEventBuilder
                 ->withPayload($eventType->getPayload())
                 ->build($eventType->getName());
             $this->outerEventDispatcher->dispatch($outerEvent);
-        } catch (IsNotSupportedEventException $e) {
+        } catch (PayloadCanNotBeCreatedException $e) {
             $this->logger->notice($e->getMessage());
         }
     }

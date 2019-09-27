@@ -62,9 +62,8 @@ class ResolveEventTypeTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Trilix\EventsApiBundle\Model\IsNotSupportedEventException
      */
-    public function throwsIsNotSupportedEventExceptionIfEventTypeWasNotResolved(): void
+    public function returnsNullIfEventTypeWasNotResolved(): void
     {
         $eventTypeConfigurationList = new EventTypeConfigurationList();
         $eventTypeConfigurationList->addEventTypeConfiguration(
@@ -79,7 +78,7 @@ class ResolveEventTypeTest extends TestCase
             }
         );
 
-        (new ResolveEventType($eventTypeConfigurationList))
+        $eventType = (new ResolveEventType($eventTypeConfigurationList))
             ->__invoke(
                 new class implements GenericEventInterface {
                     public function getSubject()
@@ -88,6 +87,8 @@ class ResolveEventTypeTest extends TestCase
                     }
                 }
             );
+
+        $this->assertNull($eventType);
     }
 }
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Trilix\EventsApiBundle\Model;
 
 use Assert\Assert;
-use Throwable;
 use Trilix\EventsApiBundle\EventType\EventType;
 use Trilix\EventsApiBundle\EventType\EventTypeConfigurationInterface;
 
@@ -25,9 +24,10 @@ class ResolveEventType
 
     /**
      * @param GenericEventInterface $event
-     * @return EventType
+     * @return EventType|null
+     * @throws PayloadCanNotBeCreatedException
      */
-    public function __invoke(GenericEventInterface $event): EventType
+    public function __invoke(GenericEventInterface $event): ?EventType
     {
         $entity = $event->getSubject();
 
@@ -44,29 +44,9 @@ class ResolveEventType
         $eventTypeConfiguration = array_shift($resolvedEventTypeConfigurations);
 
         if (!$eventTypeConfiguration) {
-            throw self::throwIsNotSupportedException($event);
+            return null;
         }
 
         return new EventType($eventTypeConfiguration->getName(), ($eventTypeConfiguration->getFactory())($event));
-    }
-
-    /**
-     * @param GenericEventInterface $event
-     * @param Throwable|null $previous
-     * @return IsNotSupportedEventException
-     */
-    private static function throwIsNotSupportedException(
-        GenericEventInterface $event,
-        Throwable $previous = null
-    ): IsNotSupportedEventException {
-        return new IsNotSupportedEventException(
-            sprintf(
-                'Given event is not supported (event=%s; subject=%s).',
-                get_class($event),
-                get_class($event->getSubject())
-            ),
-            0,
-            $previous
-        );
     }
 }

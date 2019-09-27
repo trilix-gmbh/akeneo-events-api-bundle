@@ -28,9 +28,9 @@ class CreateEventTypePayloadTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Trilix\EventsApiBundle\Model\IsNotSupportedEventException
+     * @expectedException \Trilix\EventsApiBundle\Model\PayloadCanNotBeCreatedException
      */
-    public function throwsIsNotSupportedEntityExceptionIfEntityCanNotBeSerialized(): void
+    public function throwsPayloadCanNotBeCreatedExceptionIfEntityCanNotBeSerialized(): void
     {
         $event = new class implements GenericEventInterface {
             public function getSubject()

@@ -25,6 +25,7 @@ class CreateEventTypePayload
     /**
      * @param GenericEventInterface $event
      * @return array
+     * @throws PayloadCanNotBeCreatedException if $entity can not be serialized
      */
     public function __invoke(GenericEventInterface $event): array
     {
@@ -33,9 +34,9 @@ class CreateEventTypePayload
         try {
             $payload = $this->serializer->normalize($entity, 'external_api');
         } catch (SerializerExceptionInterface $e) {
-            throw new IsNotSupportedEventException(
+            throw new PayloadCanNotBeCreatedException(
                 sprintf(
-                    'Given event is not supported (event=%s; subject=%s).',
+                    'Payload can not be created for the given event (event=%s; subject=%s).',
                     get_class($event),
                     get_class($entity)
                 ),

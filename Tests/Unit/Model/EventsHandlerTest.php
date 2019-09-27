@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Trilix\EventsApiBundle\Tests\Unit\Model;
 
+use Assert\InvalidArgumentException as AssertionInvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -12,12 +13,12 @@ use Trilix\EventsApiBundle\EventType\EventType;
 use Trilix\EventsApiBundle\Model\ResolveEventType;
 use Trilix\EventsApiBundle\Model\GenericEventInterface;
 use Trilix\EventsApiBundle\Model\EventsHandler;
-use Trilix\EventsApiBundle\Model\IsNotSupportedEventException;
+use Trilix\EventsApiBundle\Model\PayloadCanNotBeCreatedException;
 use Trilix\EventsApiBundle\Model\OuterEventDispatcherInterface;
 use Trilix\EventsApiBundle\OuterEvent\OuterEvent;
 use Trilix\EventsApiBundle\OuterEvent\OuterEventBuilder;
 
-class GenericEventsHandlerTest extends TestCase
+class EventsHandlerTest extends TestCase
 {
     /** @var ResolveEventType|MockObject */
     private $resolver;
@@ -50,7 +51,7 @@ class GenericEventsHandlerTest extends TestCase
      */
     public function throwsInvalidArgumentExceptionIfGenericEventSubjectIsNotObject(): void
     {
-        $this->expectException(\Assert\InvalidArgumentException::class);
+        $this->expectException(AssertionInvalidArgumentException::class);
 
         $this->handler->handle(
             new class implements GenericEventInterface {
@@ -65,7 +66,7 @@ class GenericEventsHandlerTest extends TestCase
     /**
      * @test
      */
-    public function catchesIsNotSupportedEntityException(): void
+    public function stopsHandlingIfEventTypeWasNotResolved(): void
     {
         $event = new class implements GenericEventInterface {
             public function getSubject()
@@ -75,7 +76,32 @@ class GenericEventsHandlerTest extends TestCase
         };
 
         $this->resolver->expects($this->once())->method('__invoke')
-            ->with($event)->willThrowException(new IsNotSupportedEventException('testMessage'));
+            ->with($event)->will($this->returnValue(null));
+
+        $this->builder->expects($this->never())->method('withPayload');
+        $this->builder->expects($this->never())->method('build');
+
+        $this->dispatcher->expects($this->never())->method('dispatch');
+
+        $this->logger->expects($this->never())->method('notice');
+
+        $this->handler->handle($event);
+    }
+
+    /**
+     * @test
+     */
+    public function catchesPayloadCanNotBeCreatedException(): void
+    {
+        $event = new class implements GenericEventInterface {
+            public function getSubject()
+            {
+                return new Subject();
+            }
+        };
+
+        $this->resolver->expects($this->once())->method('__invoke')
+            ->with($event)->willThrowException(new PayloadCanNotBeCreatedException('testMessage'));
 
         $this->logger->expects($this->once())
             ->method('notice')
