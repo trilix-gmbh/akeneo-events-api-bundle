@@ -9,14 +9,16 @@ use Akeneo\Tool\Component\Batch\Job\JobParameters\ConstraintCollectionProviderIn
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\Optional;
 
-class DeliverOuterEventToConsumerConstraintCollectionProvider implements ConstraintCollectionProviderInterface
+class DeliverOuterEventConstraintCollectionProvider implements ConstraintCollectionProviderInterface
 {
+    const JOB_PARAMETER_KEY_OUTER_EVENT_JSON = 'outer_event_json';
+
     /**
      * {@inheritdoc}
      */
     public function getConstraintCollection(): Collection
     {
-        return new Collection(['fields' => ['event' => new Optional()]]);
+        return new Collection(['fields' => [self::JOB_PARAMETER_KEY_OUTER_EVENT_JSON => new Optional()]]);
     }
 
     /**

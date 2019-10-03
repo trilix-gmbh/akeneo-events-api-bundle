@@ -1,5 +1,5 @@
 parameters:
-    pim_events_api.job.job_parameters.constraint_collection_provider.deliver_outer_event_to_consumer.class: Trilix\EventsApiBundle\Job\JobParameters\DeliverOuterEventToConsumerConstraintCollectionProvider
+    pim_events_api.job.job_parameters.constraint_collection_provider.deliver_outer_event.class: Trilix\EventsApiBundle\Job\JobParameters\DeliverOuterEventConstraintCollectionProvider
     pim_events_api.tasklet.deliver_outer_event_to_consumer.class: Trilix\EventsApiBundle\Job\DeliverOuterEventToConsumerTasklet
     pim_events_api.deliver_outer_event_to_consumer.job_type: 'deliver_outer_event_to_consumer'
     pim_events_api.deliver_outer_event_to_consumer.job_name: 'deliver_outer_event_to_consumer'
@@ -7,8 +7,8 @@ parameters:
     pim_events_api.deliver_outer_event_to_consumer.connector_name: 'deliver_outer_event_to_consumer'
 
 services:
-    pim_events_api.job.job_parameters.constraint_collection_provider.deliver_outer_event_to_consumer:
-        class: '%pim_events_api.job.job_parameters.constraint_collection_provider.deliver_outer_event_to_consumer.class%'
+    pim_events_api.job.job_parameters.constraint_collection_provider.deliver_outer_event:
+        class: '%pim_events_api.job.job_parameters.constraint_collection_provider.deliver_outer_event.class%'
         tags:
             - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }
 

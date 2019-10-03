@@ -9,6 +9,7 @@ use Akeneo\Tool\Component\Connector\Step\TaskletInterface;
 use Psr\Log\LoggerInterface;
 use Trilix\EventsApiBundle\HttpClient\Exception as HttpClientException;
 use Trilix\EventsApiBundle\HttpClient\HttpClientFactoryInterface;
+use Trilix\EventsApiBundle\Job\JobParameters\DeliverOuterEventConstraintCollectionProvider;
 use Trilix\EventsApiBundle\Model\EventsApiApplicationProviderInterface;
 
 class DeliverOuterEventToConsumerTasklet implements TaskletInterface
@@ -54,10 +55,12 @@ class DeliverOuterEventToConsumerTasklet implements TaskletInterface
     public function execute(): void
     {
         $application = $this->eventsApiApplicationProvider->retrieve();
-        $event = $this->stepExecution->getJobParameters()->get('event');
+        $outerEventJson = $this->stepExecution->getJobParameters()
+            ->get(DeliverOuterEventConstraintCollectionProvider::JOB_PARAMETER_KEY_OUTER_EVENT_JSON);
+
         $client = $this->httpClientFactory->create($application->getRequestUrl());
         try {
-            $client->send(json_encode($event));
+            $client->send($outerEventJson);
         } catch (HttpClientException $e) {
             $this->logger->error($e->getMessage());
             throw $e;

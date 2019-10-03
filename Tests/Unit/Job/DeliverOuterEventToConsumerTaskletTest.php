@@ -41,13 +41,42 @@ class DeliverOuterEventToConsumerTaskletTest extends TestCase
 
         $application = new EventsApiApplication('foo', 'http://bar.com');
 
-        $this->applicationProvider->expects($this->once())->method('retrieve')->will($this->returnValue($application));
+        $this->applicationProvider ->expects($this->once())->method('retrieve')
+            ->will($this->returnValue($application));
 
         $this->tasklet = new DeliverOuterEventToConsumerTasklet(
             $this->applicationProvider,
             $this->httpClientFactory,
             $this->logger
         );
+    }
+
+    /**
+     * @test
+     */
+    public function HttpClientExceptionBeingLogged(): void
+    {
+        $event = ['foo'];
+
+        /** @var HttpClientInterface|MockObject $httpClient */
+        $httpClient = $this->getMockBuilder(HttpClientInterface::class)->getMock();
+
+        $this->httpClientFactory->expects($this->once())->method('create')
+            ->with('http://bar.com')->will($this->returnValue($httpClient));
+
+        $httpClient->expects($this->once())->method('send')
+            ->with(json_encode($event))->willThrowException(new HttpClientException('_HttpClientException_'));
+
+        $this->logger->expects($this->once())->method('error')
+            ->with('_HttpClientException_');
+
+        $this->tasklet->setStepExecution(
+            $this->createStepExecution(new JobParameters(['outer_event_json' => json_encode($event)]))
+        );
+
+        $this->expectException(HttpClientException::class);
+
+        $this->tasklet->execute();
     }
 
     /**
@@ -68,34 +97,9 @@ class DeliverOuterEventToConsumerTaskletTest extends TestCase
         $httpClient->expects($this->once())->method('send')
             ->with($this->isJson())->will($this->returnValue($response));
 
-        $this->tasklet->setStepExecution($this->createStepExecution(new JobParameters(['event' => $event])));
-
-        $this->tasklet->execute();
-    }
-
-    /**
-     * @test
-     */
-    public function expectedExceptionIsRaised(): void
-    {
-        /** @var HttpClientInterface|MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(HttpClientInterface::class)->getMock();
-
-        $event = ['foo'];
-
-        $this->httpClientFactory->expects($this->once())->method('create')
-            ->with('http://bar.com')->will($this->returnValue($httpClient));
-
-        $httpClient->expects($this->once())->method('send')
-            ->with($this->isJson())->will($this->throwException(new HttpClientException('testMessage')));
-
-        $this->tasklet->setStepExecution($this->createStepExecution(new JobParameters(['event' => $event])));
-
-        $this->logger->expects($this->once())->method('error')
-            ->with('testMessage');
-
-        $this->expectException(HttpClientException::class);
-        $this->expectExceptionMessage('testMessage');
+        $this->tasklet->setStepExecution(
+            $this->createStepExecution(new JobParameters(['outer_event_json' => json_encode($event)]))
+        );
 
         $this->tasklet->execute();
     }

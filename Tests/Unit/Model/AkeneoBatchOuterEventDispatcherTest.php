@@ -92,7 +92,7 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
         $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar']);
 
         $this->jobLauncher->expects($this->once())->method('launch')
-            ->with($jobInstance, $user, ['event' => $outerEvent]);
+            ->with($jobInstance, $user, ['outer_event_json' => $outerEvent]);
 
         $this->dispatcher->dispatch($outerEvent);
     }
