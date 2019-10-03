@@ -10,30 +10,30 @@ use JsonSerializable;
 class OuterEvent implements JsonSerializable
 {
     /** @var string */
-    private $type;
+    private $eventType;
 
     /** @var array */
     private $payload;
 
     /**
      * OuterEvent constructor.
-     * @param string $type
+     * @param string $eventType
      * @param array $payload
      */
-    public function __construct(string $type, array $payload)
+    public function __construct(string $eventType, array $payload)
     {
-        Assert::that($type)->notBlank();
+        Assert::that($eventType)->notBlank();
 
-        $this->type = $type;
+        $this->eventType = $eventType;
         $this->payload = $payload;
     }
 
     /**
      * @return string
      */
-    public function getType(): string
+    public function getEventType(): string
     {
-        return $this->type;
+        return $this->eventType;
     }
 
     /**
@@ -50,7 +50,7 @@ class OuterEvent implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'event_type' => $this->type,
+            'event_type' => $this->eventType,
             'payload' => $this->payload
         ];
     }

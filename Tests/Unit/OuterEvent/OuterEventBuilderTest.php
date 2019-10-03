@@ -16,7 +16,7 @@ class OuterEventBuilderTest extends TestCase
     {
         $outerEvent = (new OuterEventBuilder())->build('foo_event');
 
-        $this->assertEquals('foo_event', $outerEvent->getType());
+        $this->assertEquals('foo_event', $outerEvent->getEventType());
         $this->assertCount(0, $outerEvent->getPayload());
     }
 
@@ -30,7 +30,7 @@ class OuterEventBuilderTest extends TestCase
             ->withPayload($payload)
             ->build('foo_event');
 
-        $this->assertEquals('foo_event', $outerEvent->getType());
+        $this->assertEquals('foo_event', $outerEvent->getEventType());
         $this->assertEquals($payload, $outerEvent->getPayload());
     }
 

@@ -16,7 +16,7 @@ class OuterEventTest extends TestCase
     {
         $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar']);
 
-        $this->assertEquals('foo_bar_event', $outerEvent->getType());
+        $this->assertEquals('foo_bar_event', $outerEvent->getEventType());
         $this->assertEquals(['foo' => 'bar'], $outerEvent->getPayload());
     }
 
