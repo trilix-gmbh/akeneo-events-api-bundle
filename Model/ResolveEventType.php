@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Trilix\EventsApiBundle\Model;
 
 use Assert\Assert;
+use Trilix\EventsApiBundle\EventType\EventIsNotSupportedException;
 use Trilix\EventsApiBundle\EventType\EventType;
 use Trilix\EventsApiBundle\EventType\EventTypeConfigurationInterface;
 
@@ -33,20 +34,19 @@ class ResolveEventType
 
         Assert::that($entity)->isObject();
 
-        $resolvedEventTypeConfigurations = array_filter(
-            $this->eventTypeConfigurationList->getIterator()->getArrayCopy(),
-            function (EventTypeConfigurationInterface $eventTypeConfiguration) use ($event) {
-                return ($eventTypeConfiguration->getResolver())($event);
+        $eventType = null;
+        $iterator = $this->eventTypeConfigurationList->getIterator();
+        $iterator->rewind();
+        while (is_null($eventType) && $iterator->valid() && $configuration = $iterator->current()) {
+            try {
+                /** @var EventTypeConfigurationInterface $configuration */
+                $eventType = $configuration->resolve($event);
+            } catch (EventIsNotSupportedException $e) {
+            } finally {
+                $iterator->next();
             }
-        );
-
-        /** @var EventTypeConfigurationInterface $eventTypeConfiguration */
-        $eventTypeConfiguration = array_shift($resolvedEventTypeConfigurations);
-
-        if (!$eventTypeConfiguration) {
-            return null;
         }
 
-        return new EventType($eventTypeConfiguration->getName(), ($eventTypeConfiguration->getFactory())($event));
+        return $eventType;
     }
 }

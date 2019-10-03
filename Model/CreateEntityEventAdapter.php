@@ -13,7 +13,7 @@ class CreateEntityEventAdapter extends GenericEvent implements GenericCreateEnti
      * CreateGenericEventAdapter constructor.
      * @param $subject
      */
-    public function __construct($subject)
+    private function __construct(object $subject)
     {
         Assert::that($subject)->isObject();
         parent::__construct($subject);

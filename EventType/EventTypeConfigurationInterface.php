@@ -1,21 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Trilix\EventsApiBundle\EventType;
+
+use Trilix\EventsApiBundle\Model\GenericEventInterface;
 
 interface EventTypeConfigurationInterface
 {
     /**
-     * @return string
+     * @param GenericEventInterface $event
+     * @return EventType
+     * @throws EventIsNotSupportedException
      */
-    public function getName(): string;
-
-    /**
-     * @return callable
-     */
-    public function getResolver(): callable;
-
-    /**
-     * @return callable
-     */
-    public function getFactory(): callable ;
+    public function resolve(GenericEventInterface $event): EventType;
 }
