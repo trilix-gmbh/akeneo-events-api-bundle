@@ -89,10 +89,10 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
         $this->jobInstanceRepository->expects($this->once())->method('findOneByIdentifier')
             ->with('deliver_outer_event_to_consumer')->will($this->returnValue($jobInstance));
 
-        $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar']);
+        $outerEvent = new OuterEvent('foo', ['foo' => 'bar']);
 
         $this->jobLauncher->expects($this->once())->method('launch')
-            ->with($jobInstance, $user, ['outer_event_json' => $outerEvent]);
+            ->with($jobInstance, $user, ['outer_event' => ['event_type' => 'foo', 'payload' => ['foo' => 'bar']]]);
 
         $this->dispatcher->dispatch($outerEvent);
     }

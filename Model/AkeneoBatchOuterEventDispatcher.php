@@ -52,7 +52,7 @@ class AkeneoBatchOuterEventDispatcher implements OuterEventDispatcherInterface
             ->launch(
                 $jobInstance,
                 $token->getUser(),
-                [DeliverOuterEventConstraintCollectionProvider::JOB_PARAMETER_KEY_OUTER_EVENT_JSON => $event]
+                [DeliverOuterEventConstraintCollectionProvider::JOB_PARAMETER_KEY_OUTER_EVENT => $event->toArray()]
             );
     }
 }

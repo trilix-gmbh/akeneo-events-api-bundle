@@ -47,11 +47,40 @@ class OuterEvent implements JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray(): array
     {
         return [
             'event_type' => $this->eventType,
             'payload' => $this->payload
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * @param array $array
+     * @return OuterEvent
+     */
+    public static function createFromArray(array $array): self
+    {
+        Assert::that($array)
+            ->keyExists('event_type')
+            ->keyExists('payload');
+
+        Assert::that($array['event_type'])
+            ->string()
+            ->notEmpty();
+
+        Assert::that($array['payload'])
+            ->isArray()
+            ->notEmpty();
+
+        return new OuterEvent($array['event_type'], $array['payload']);
     }
 }

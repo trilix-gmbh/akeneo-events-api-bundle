@@ -57,10 +57,10 @@ class EventTypeConfigurationTest extends TestCase
         $eventType = $eventTypeConfiguration->resolve($event);
 
         $this->assertNotNull($eventType);
-        $this->assertEquals($eventType->getName(), 'foo');
+        $this->assertSame($eventType->getName(), 'foo');
         $this->assertNotEmpty($eventType->getPayload());
         $this->assertArrayHasKey('foo', $eventType->getPayload());
-        $this->assertEquals(get_class($event->getSubject()), $eventType->getPayload()['foo']);
+        $this->assertSame(get_class($event->getSubject()), $eventType->getPayload()['foo']);
     }
 }
 

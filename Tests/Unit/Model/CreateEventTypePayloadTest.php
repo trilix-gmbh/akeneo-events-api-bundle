@@ -63,6 +63,6 @@ class CreateEventTypePayloadTest extends TestCase
             ->willReturn($expectedPayload);
         $actualPayload = (new CreateEventTypePayload($this->serializer))->__invoke($event);
 
-        $this->assertEquals($expectedPayload, $actualPayload);
+        $this->assertSame($expectedPayload, $actualPayload);
     }
 }

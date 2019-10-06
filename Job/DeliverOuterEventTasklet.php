@@ -6,39 +6,33 @@ namespace Trilix\EventsApiBundle\Job;
 
 use Akeneo\Tool\Component\Batch\Model\StepExecution;
 use Akeneo\Tool\Component\Connector\Step\TaskletInterface;
-use Psr\Log\LoggerInterface;
-use Trilix\EventsApiBundle\HttpClient\Exception as HttpClientException;
-use Trilix\EventsApiBundle\HttpClient\HttpClientFactoryInterface;
 use Trilix\EventsApiBundle\Job\JobParameters\DeliverOuterEventConstraintCollectionProvider;
 use Trilix\EventsApiBundle\Model\EventsApiApplicationProviderInterface;
+use Trilix\EventsApiBundle\OuterEvent\OuterEvent;
+use Trilix\EventsApiBundle\Transport\Transport;
 
-class DeliverOuterEventToConsumerTasklet implements TaskletInterface
+class DeliverOuterEventTasklet implements TaskletInterface
 {
     /** @var EventsApiApplicationProviderInterface */
     private $eventsApiApplicationProvider;
 
-    /** @var HttpClientFactoryInterface */
-    private $httpClientFactory;
+    /** @var Transport */
+    private $transport;
 
     /** @var StepExecution */
     private $stepExecution;
 
-    /** @var LoggerInterface */
-    private $logger;
-
     /**
      * DeliverOuterEventToConsumerTasklet constructor.
      * @param EventsApiApplicationProviderInterface $eventsApiApplicationProvider
-     * @param HttpClientFactoryInterface $httpClientFactory
+     * @param Transport $transport
      */
     public function __construct(
         EventsApiApplicationProviderInterface $eventsApiApplicationProvider,
-        HttpClientFactoryInterface $httpClientFactory,
-        LoggerInterface $logger
+        Transport $transport
     ) {
         $this->eventsApiApplicationProvider = $eventsApiApplicationProvider;
-        $this->httpClientFactory = $httpClientFactory;
-        $this->logger = $logger;
+        $this->transport = $transport;
     }
 
     /**
@@ -56,14 +50,8 @@ class DeliverOuterEventToConsumerTasklet implements TaskletInterface
     {
         $application = $this->eventsApiApplicationProvider->retrieve();
         $outerEventJson = $this->stepExecution->getJobParameters()
-            ->get(DeliverOuterEventConstraintCollectionProvider::JOB_PARAMETER_KEY_OUTER_EVENT_JSON);
+            ->get(DeliverOuterEventConstraintCollectionProvider::JOB_PARAMETER_KEY_OUTER_EVENT);
 
-        $client = $this->httpClientFactory->create($application->getRequestUrl());
-        try {
-            $client->send($outerEventJson);
-        } catch (HttpClientException $e) {
-            $this->logger->error($e->getMessage());
-            throw $e;
-        }
+        $this->transport->deliver($application, OuterEvent::createFromArray($outerEventJson));
     }
 }

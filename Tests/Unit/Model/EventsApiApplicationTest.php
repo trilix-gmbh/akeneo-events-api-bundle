@@ -16,7 +16,7 @@ class EventsApiApplicationTest extends TestCase
     {
         $application = new EventsApiApplication('foo', 'http://foo.com');
 
-        $this->assertEquals('foo', $application->getCode());
-        $this->assertEquals('http://foo.com', $application->getRequestUrl());
+        $this->assertSame('foo', $application->getCode());
+        $this->assertSame('http://foo.com', $application->getRequestUrl());
     }
 }

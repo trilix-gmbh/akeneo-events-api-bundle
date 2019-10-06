@@ -11,14 +11,14 @@ use Symfony\Component\Validator\Constraints\Optional;
 
 class DeliverOuterEventConstraintCollectionProvider implements ConstraintCollectionProviderInterface
 {
-    const JOB_PARAMETER_KEY_OUTER_EVENT_JSON = 'outer_event_json';
+    const JOB_PARAMETER_KEY_OUTER_EVENT = 'outer_event';
 
     /**
      * {@inheritdoc}
      */
     public function getConstraintCollection(): Collection
     {
-        return new Collection(['fields' => [self::JOB_PARAMETER_KEY_OUTER_EVENT_JSON => new Optional()]]);
+        return new Collection(['fields' => [self::JOB_PARAMETER_KEY_OUTER_EVENT => new Optional()]]);
     }
 
     /**
