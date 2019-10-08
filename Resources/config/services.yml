@@ -1,6 +1,5 @@
 parameters:
     pim_events_api.event_subscriber.akeneo_storage_utils_subscriber.class: Trilix\EventsApiBundle\EventSubscriber\AkeneoStorageUtilsSubscriber
-    pim_events_api.events_api_application_provider.default.class: Trilix\EventsApiBundle\Model\DefaultEventsApiApplicationProvider
     pim_events_api.events_handler.class: Trilix\EventsApiBundle\Model\EventsHandler
     pim_events_api.outer_event_builder.class: Trilix\EventsApiBundle\OuterEvent\OuterEventBuilder
     pim_events_api.create_event_type_payload.class: Trilix\EventsApiBundle\Model\CreateEventTypePayload
@@ -26,11 +25,6 @@ services:
         tags:
             - { name: kernel.event_subscriber, priority: -255 }
 
-    pim_events_api.events_api_application_provider.default:
-        class: '%pim_events_api.events_api_application_provider.default.class%'
-        arguments:
-            - '%trilix_events_api.default.uri%'
-
     pim_events_api.guzzle.http_client_factory:
         class: '%pim_events_api.guzzle.http_client_factory.class%'
 
@@ -45,6 +39,7 @@ services:
     pim_events_api.transport.http:
         class: '%pim_events_api.transport.http.class%'
         arguments:
+            - '%trilix_events_api.http.request_url%'
             - '@pim_events_api.guzzle.http_client_factory'
 
     pim_events_api.resolve_event_type:

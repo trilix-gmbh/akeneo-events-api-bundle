@@ -16,10 +16,12 @@ class TrilixEventsApiExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $config = $this->processConfiguration(new Configuration(), $configs);
-        $applications = $config['applications'] ?? [];
 
-        foreach ($applications as $code => $cfg) {
-            $container->setParameter(sprintf('%s.%s.uri', $this->getAlias(), $code), $cfg['uri']);
+        $transport = $config['transport'];
+        $transportOptions = $config[$transport] ?? [];
+
+        foreach ($transportOptions as $key => $value) {
+            $container->setParameter(sprintf('%s.%s.%s', $this->getAlias(), $transport, $key), $value);
         }
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

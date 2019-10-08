@@ -10,8 +10,6 @@ use Akeneo\Tool\Component\Batch\Model\StepExecution;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Trilix\EventsApiBundle\Job\DeliverOuterEventTasklet;
-use Trilix\EventsApiBundle\Model\EventsApiApplication;
-use Trilix\EventsApiBundle\Model\EventsApiApplicationProviderInterface;
 use Trilix\EventsApiBundle\OuterEvent\OuterEvent;
 use Trilix\EventsApiBundle\Transport\Transport;
 
@@ -22,23 +20,14 @@ class DeliverOuterEventTaskletTest extends TestCase
      */
     public function executes(): void
     {
-        $application = new EventsApiApplication('foo', 'http://bar.com');
         $event = new OuterEvent('foo_event', ['foo' => 'payload']);
-
-        /** @var EventsApiApplicationProviderInterface|MockObject $applicationProvider */
-        $applicationProvider = $this->getMockBuilder(EventsApiApplicationProviderInterface::class)->getMock();
-        $applicationProvider ->expects($this->once())->method('retrieve')
-            ->will($this->returnValue($application));
 
         /** @var Transport|MockObject $transport */
         $transport = $this->getMockBuilder(Transport::class)->getMock();
         $transport->expects($this->once())->method('deliver')
-            ->with($this->isInstanceOf(EventsApiApplication::class), $event);
+            ->with($event);
 
-        $tasklet = new DeliverOuterEventTasklet(
-            $applicationProvider,
-            $transport
-        );
+        $tasklet = new DeliverOuterEventTasklet($transport);
 
         $tasklet->setStepExecution(
             $this->createStepExecution(new JobParameters(['outer_event' => $event->toArray()]))
