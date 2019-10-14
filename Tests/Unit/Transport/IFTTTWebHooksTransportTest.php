@@ -9,16 +9,17 @@ use PHPUnit\Framework\TestCase;
 use Trilix\EventsApiBundle\HttpClient\HttpClientFactoryInterface;
 use Trilix\EventsApiBundle\HttpClient\HttpClientInterface;
 use Trilix\EventsApiBundle\OuterEvent\OuterEvent;
-use Trilix\EventsApiBundle\Transport\HttpTransport;
+use Trilix\EventsApiBundle\Transport\IFTTTWebHooksTransport;
 
-class HttpTransportTest extends TestCase
+class IFTTTWebHooksTransportTest extends TestCase
 {
     /**
      * @test
      */
-    public function deliversOuterEventViaHttpClient(): void
+    public function deliversOuterEventToIFTTTWebHooks(): void
     {
-        $outerEvent = new OuterEvent('foo_event', ['foo' => 'payload']);
+        $outerEvent = new OuterEvent('foo_name', ['foo' => 'payload']);
+        $requestUrl = 'https://iftt.com/a/b/{event}/x/y';
 
         /** @var HttpClientInterface|MockObject $httpClient */
         $httpClient = $this->getMockBuilder(HttpClientInterface::class)->getMock();
@@ -26,11 +27,17 @@ class HttpTransportTest extends TestCase
         $httpClientFactory = $this->getMockBuilder(HttpClientFactoryInterface::class)->getMock();
 
         $httpClientFactory->expects($this->once())->method('create')
-            ->with('http://localhost:1234')->willReturn($httpClient);
-        $httpClient->expects($this->once())->method('send')->with(json_encode($outerEvent));
+            ->with('https://iftt.com/a/b/foo_name/x/y')->willReturn($httpClient);
+        $httpClient->expects($this->once())->method('send')
+            ->with(
+                json_encode([
+                    'value1' => 'foo_name',
+                    'value2' => ['foo' => 'payload']
+                ])
+            );
 
-        $httpTransport = new HttpTransport('http://localhost:1234', $httpClientFactory);
+        $transport = new IFTTTWebHooksTransport($requestUrl, $httpClientFactory);
 
-        $httpTransport->deliver($outerEvent);
+        $transport->deliver($outerEvent);
     }
 }

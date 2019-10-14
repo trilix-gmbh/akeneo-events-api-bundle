@@ -7,7 +7,7 @@ parameters:
     pim_events_api.event_type_configuration_list.class: Trilix\EventsApiBundle\Model\EventTypeConfigurationList
     pim_events_api.akeneo_batch_outer_event_dispatcher.class: Trilix\EventsApiBundle\Model\AkeneoBatchOuterEventDispatcher
     pim_events_api.guzzle.http_client_factory.class: Trilix\EventsApiBundle\Guzzle\HttpClientFactory
-    pim_events_api.transport.http.class: Trilix\EventsApiBundle\Transport\HttpTransport
+    pim_events_api.transport_factory.http.class: Trilix\EventsApiBundle\Transport\HttpTransportFactory
 
 services:
     pim_events_api.akeneo_batch_outer_event_dispatcher:
@@ -36,12 +36,6 @@ services:
             - '@pim_events_api.akeneo_batch_outer_event_dispatcher'
             - '@logger'
 
-    pim_events_api.transport.http:
-        class: '%pim_events_api.transport.http.class%'
-        arguments:
-            - '%trilix_events_api.http.request_url%'
-            - '@pim_events_api.guzzle.http_client_factory'
-
     pim_events_api.resolve_event_type:
         class: '%pim_events_api.resolve_event_type.class%'
         arguments:
@@ -57,3 +51,13 @@ services:
 
     pim_events_api.event_type_configuration_list:
         class: '%pim_events_api.event_type_configuration_list.class%'
+
+    pim_events_api.transport_factory.http:
+        class: '%pim_events_api.transport_factory.http.class%'
+        arguments:
+            - '@pim_events_api.guzzle.http_client_factory'
+
+    pim_events_api.transport_factory.ifttt_webhooks:
+        class: Trilix\EventsApiBundle\Transport\IFTTTWebHooksTransportFactory
+        arguments:
+            - '@pim_events_api.guzzle.http_client_factory'

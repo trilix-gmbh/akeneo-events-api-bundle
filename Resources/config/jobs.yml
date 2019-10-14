@@ -23,7 +23,7 @@ services:
     pim_events_api.tasklet.deliver_outer_event:
         class: '%pim_events_api.tasklet.deliver_outer_event.class%'
         arguments:
-            - '@pim_events_api.transport.http'
+            - '@pim_events_api.transport.default'
         public: false
 
     pim_events_api.step.deliver_outer_event:

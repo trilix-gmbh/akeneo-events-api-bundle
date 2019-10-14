@@ -16,17 +16,17 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('trilix_events_api');
 
         $rootNode
-            ->beforeNormalization()
-                ->ifTrue(function ($v) {
-                    return isset($v['transport']) && !isset($v[$v['transport']]);
-                })
-                ->thenInvalid(sprintf('Events API: Transport is not configured.'))
-            ->end()
             ->children()
-                ->scalarNode('transport')->isRequired()->defaultValue('http')->end()
-                ->arrayNode('http')
+                ->arrayNode('transport')
                     ->children()
-                        ->scalarNode('request_url')->end()
+                        ->scalarNode('factory')
+                            ->isRequired()
+                            ->defaultValue('pim_events_api.transport_factory.http')
+                        ->end()
+                        ->arrayNode('options')
+                            ->prototype('scalar')
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
             ->end()
