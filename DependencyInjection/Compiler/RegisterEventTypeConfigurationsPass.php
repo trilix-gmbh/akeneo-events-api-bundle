@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class RegisterEventTypesPass implements CompilerPassInterface
+class RegisterEventTypeConfigurationsPass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}
