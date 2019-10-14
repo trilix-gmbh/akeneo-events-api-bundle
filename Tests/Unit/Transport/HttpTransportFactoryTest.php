@@ -8,6 +8,7 @@ use Assert\InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Trilix\EventsApiBundle\HttpClient\HttpClientFactoryInterface;
+use Trilix\EventsApiBundle\HttpClient\RequestFactoryInterface;
 use Trilix\EventsApiBundle\Transport\HttpTransport;
 use Trilix\EventsApiBundle\Transport\HttpTransportFactory;
 
@@ -24,7 +25,9 @@ class HttpTransportFactoryTest extends TestCase
 
         /** @var HttpClientFactoryInterface|MockObject $httpClientFactory */
         $httpClientFactory = $this->getMockBuilder(HttpClientFactoryInterface::class)->getMock();
-        $factory = new HttpTransportFactory($httpClientFactory);
+        /** @var RequestFactoryInterface|MockObject $requestFactory */
+        $requestFactory = $this->getMockBuilder(RequestFactoryInterface::class)->getMock();
+        $factory = new HttpTransportFactory($httpClientFactory, $requestFactory);
 
         $factory->create($options);
     }
@@ -36,7 +39,9 @@ class HttpTransportFactoryTest extends TestCase
     {
         /** @var HttpClientFactoryInterface|MockObject $httpClientFactory */
         $httpClientFactory = $this->getMockBuilder(HttpClientFactoryInterface::class)->getMock();
-        $factory = new HttpTransportFactory($httpClientFactory);
+        /** @var RequestFactoryInterface|MockObject $requestFactory */
+        $requestFactory = $this->getMockBuilder(RequestFactoryInterface::class)->getMock();
+        $factory = new HttpTransportFactory($httpClientFactory, $requestFactory);
 
         $transport = $factory->create(['request_url' => 'http://foo.bar']);
 

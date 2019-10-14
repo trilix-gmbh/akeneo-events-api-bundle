@@ -8,6 +8,7 @@ use Assert\InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Trilix\EventsApiBundle\HttpClient\HttpClientFactoryInterface;
+use Trilix\EventsApiBundle\HttpClient\RequestFactoryInterface;
 use Trilix\EventsApiBundle\Transport\IFTTTWebHooksTransport;
 use Trilix\EventsApiBundle\Transport\IFTTTWebHooksTransportFactory;
 
@@ -26,7 +27,9 @@ class IFTTTWebHooksTransportFactoryTest extends TestCase
 
         /** @var HttpClientFactoryInterface|MockObject $httpClientFactory */
         $httpClientFactory = $this->getMockBuilder(HttpClientFactoryInterface::class)->getMock();
-        $factory = new IFTTTWebHooksTransportFactory($httpClientFactory);
+        /** @var RequestFactoryInterface|MockObject $requestFactory */
+        $requestFactory = $this->getMockBuilder(RequestFactoryInterface::class)->getMock();
+        $factory = new IFTTTWebHooksTransportFactory($httpClientFactory, $requestFactory);
 
         $factory->create($options);
     }
@@ -38,7 +41,10 @@ class IFTTTWebHooksTransportFactoryTest extends TestCase
     {
         /** @var HttpClientFactoryInterface|MockObject $httpClientFactory */
         $httpClientFactory = $this->getMockBuilder(HttpClientFactoryInterface::class)->getMock();
-        $factory = new IFTTTWebHooksTransportFactory($httpClientFactory);
+        /** @var RequestFactoryInterface|MockObject $requestFactory */
+        $requestFactory = $this->getMockBuilder(RequestFactoryInterface::class)->getMock();
+
+        $factory = new IFTTTWebHooksTransportFactory($httpClientFactory, $requestFactory);
 
         $transport = $factory->create(['request_url' => self::IFTTT_WEBHOOKS_REQUEST_URL]);
 
