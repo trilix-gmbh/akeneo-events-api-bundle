@@ -20,7 +20,7 @@ class IFTTTWebHooksTransportTest extends TestCase
      */
     public function deliversOuterEventToIFTTTWebHooks(): void
     {
-        $outerEvent = new OuterEvent('foo_name', ['foo' => 'payload']);
+        $outerEvent = new OuterEvent('foo_name', ['foo' => 'payload'], time());
         $requestUrl = 'https://iftt.com/a/b/{event}/x/y';
 
         /** @var ClientInterface|MockObject $httpClient */

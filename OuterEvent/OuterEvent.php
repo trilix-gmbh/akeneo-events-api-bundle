@@ -15,23 +15,29 @@ class OuterEvent implements JsonSerializable
     /** @var array */
     private $payload;
 
+    /** @var int */
+    private $eventTime;
+
     /**
      * OuterEvent constructor.
      * @param string $eventType
      * @param array $payload
+     * @param int $eventTime
      */
-    public function __construct(string $eventType, array $payload)
+    public function __construct(string $eventType, array $payload, int $eventTime)
     {
-        Assert::that($eventType)->notBlank();
+        Assert::that($eventType)->notEmpty();
+        Assert::that($eventTime)->lessOrEqualThan(time());
 
         $this->eventType = $eventType;
         $this->payload = $payload;
+        $this->eventTime = $eventTime;
     }
 
     /**
      * @return string
      */
-    public function getEventType(): string
+    public function eventType(): string
     {
         return $this->eventType;
     }
@@ -39,9 +45,17 @@ class OuterEvent implements JsonSerializable
     /**
      * @return array
      */
-    public function getPayload(): array
+    public function payload(): array
     {
         return $this->payload;
+    }
+
+    /**
+     * @return int
+     */
+    public function eventTime(): int
+    {
+        return $this->eventTime;
     }
 
     /**
@@ -51,7 +65,8 @@ class OuterEvent implements JsonSerializable
     {
         return [
             'event_type' => $this->eventType,
-            'payload' => $this->payload
+            'payload' => $this->payload,
+            'event_time' => $this->eventTime
         ];
     }
 
@@ -67,20 +82,17 @@ class OuterEvent implements JsonSerializable
      * @param array $array
      * @return OuterEvent
      */
-    public static function createFromArray(array $array): self
+    public static function fromArray(array $array): self
     {
         Assert::that($array)
             ->keyExists('event_type')
-            ->keyExists('payload');
+            ->keyExists('payload')
+            ->keyExists('event_time');
 
-        Assert::that($array['event_type'])
-            ->string()
-            ->notEmpty();
+        Assert::that($array['event_type'])->string();
+        Assert::that($array['payload'])->isArray();
+        Assert::that($array['event_time'])->integer();
 
-        Assert::that($array['payload'])
-            ->isArray()
-            ->notEmpty();
-
-        return new OuterEvent($array['event_type'], $array['payload']);
+        return new self($array['event_type'], $array['payload'], $array['event_time']);
     }
 }

@@ -14,10 +14,12 @@ class OuterEventTest extends TestCase
      */
     public function objectInitialization(): void
     {
-        $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar']);
+        $eventTime = time();
+        $event = new OuterEvent('foo_bar_event', ['foo' => 'bar'], $eventTime);
 
-        $this->assertSame('foo_bar_event', $outerEvent->getEventType());
-        $this->assertSame(['foo' => 'bar'], $outerEvent->getPayload());
+        $this->assertSame('foo_bar_event', $event->eventType());
+        $this->assertSame(['foo' => 'bar'], $event->payload());
+        $this->assertSame($eventTime, $event->eventTime());
     }
 
     /**
@@ -25,14 +27,16 @@ class OuterEventTest extends TestCase
      */
     public function convertsToArray(): void
     {
-        $outerEvent = new OuterEvent('foo_event', ['foo' => 'payload']);
+        $eventTime = time();
+        $event = new OuterEvent('foo_event', ['foo' => 'payload'], $eventTime);
 
         $this->assertSame(
             [
                 'event_type' => 'foo_event',
-                'payload' => ['foo' => 'payload']
+                'payload' => ['foo' => 'payload'],
+                'event_time' => $eventTime
             ],
-            $outerEvent->toArray()
+            $event->toArray()
         );
     }
 
@@ -41,16 +45,18 @@ class OuterEventTest extends TestCase
      */
     public function beingSerializedIntoJson(): void
     {
-        $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar']);
+        $eventTime = time();
+        $event = new OuterEvent('foo_bar_event', ['foo' => 'bar'], $eventTime);
 
-        $actualJson = json_encode($outerEvent);
+        $actualJson = json_encode($event);
 
         $this->assertJson($actualJson);
         $this->assertJsonStringEqualsJsonString(
             json_encode(
                 [
                     'event_type' => 'foo_bar_event',
-                    'payload' => ['foo' => 'bar']
+                    'payload' => ['foo' => 'bar'],
+                    'event_time' => $eventTime
                 ]
             ),
             $actualJson
@@ -62,9 +68,17 @@ class OuterEventTest extends TestCase
      */
     public function beingCreatedFromArray(): void
     {
-        $event = OuterEvent::createFromArray(['event_type' => 'foo', 'payload' => ['foo' => 'payload']]);
+        $eventTime = time();
+        $event = OuterEvent::fromArray(
+            [
+                'event_type' => 'foo',
+                'payload' => ['foo' => 'payload'],
+                'event_time' => $eventTime
+            ]
+        );
 
-        $this->assertSame('foo', $event->getEventType());
-        $this->assertSame(['foo' => 'payload'], $event->getPayload());
+        $this->assertSame('foo', $event->eventType());
+        $this->assertSame(['foo' => 'payload'], $event->payload());
+        $this->assertSame($eventTime, $event->eventTime());
     }
 }

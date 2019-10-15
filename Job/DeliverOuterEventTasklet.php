@@ -43,6 +43,6 @@ class DeliverOuterEventTasklet implements TaskletInterface
         $outerEventJson = $this->stepExecution->getJobParameters()
             ->get(DeliverOuterEventConstraintCollectionProvider::JOB_PARAMETER_KEY_OUTER_EVENT);
 
-        $this->transport->deliver(OuterEvent::createFromArray($outerEventJson));
+        $this->transport->deliver(OuterEvent::fromArray($outerEventJson));
     }
 }

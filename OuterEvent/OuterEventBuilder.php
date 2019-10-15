@@ -21,7 +21,7 @@ class OuterEventBuilder
      */
     public function build(string $eventName): OuterEvent
     {
-        $outerEvent = new OuterEvent($eventName, $this->payload);
+        $outerEvent = new OuterEvent($eventName, $this->payload, time());
 
         $this->payload = [];
 

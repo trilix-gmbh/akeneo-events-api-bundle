@@ -12,26 +12,32 @@ class OuterEventBuilderTest extends TestCase
     /**
      * @test
      */
-    public function buildsOuterEventWithEventNameAndEmptyPayload(): void
+    public function buildsOuterEvent(): void
     {
         $outerEvent = (new OuterEventBuilder())->build('foo_event');
-
-        $this->assertSame('foo_event', $outerEvent->getEventType());
-        $this->assertCount(0, $outerEvent->getPayload());
+        $this->assertSame('foo_event', $outerEvent->eventType());
     }
 
     /**
      * @test
      */
-    public function buildsOuterEventWithPayload(): void
+    public function buildsOuterEventWithEmptyPayload(): void
+    {
+        $outerEvent = (new OuterEventBuilder())->build('foo_event');
+        $this->assertEmpty($outerEvent->payload());
+    }
+
+    /**
+     * @test
+     */
+    public function buildsOuterEventWithNotEmptyPayload(): void
     {
         $payload = ['foo' => 'bar'];
         $outerEvent = (new OuterEventBuilder())
             ->withPayload($payload)
             ->build('foo_event');
 
-        $this->assertSame('foo_event', $outerEvent->getEventType());
-        $this->assertSame($payload, $outerEvent->getPayload());
+        $this->assertSame($payload, $outerEvent->payload());
     }
 
     /**
@@ -44,11 +50,10 @@ class OuterEventBuilderTest extends TestCase
         $payload = ['foo' => 'bar'];
 
         $outerEventWithPayload = $builder->withPayload($payload)->build('with_payload');
-
         $outerEventWithOutPayload = $builder->build('with_out_payload');
 
-        $this->assertSame($payload, $outerEventWithPayload->getPayload());
-        $this->assertCount(0, $outerEventWithOutPayload->getPayload());
+        $this->assertSame($payload, $outerEventWithPayload->payload());
+        $this->assertEmpty($outerEventWithOutPayload->payload());
     }
 }
 

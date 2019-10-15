@@ -20,7 +20,7 @@ class HttpTransportTest extends TestCase
      */
     public function deliversOuterEventViaHttpClient(): void
     {
-        $outerEvent = new OuterEvent('foo_event', ['foo' => 'payload']);
+        $outerEvent = new OuterEvent('foo_event', ['foo' => 'payload'], time());
 
         /** @var ClientInterface|MockObject $httpClient */
         $httpClient = $this->getMockBuilder(ClientInterface::class)->getMock();

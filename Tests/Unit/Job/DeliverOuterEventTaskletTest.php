@@ -20,7 +20,7 @@ class DeliverOuterEventTaskletTest extends TestCase
      */
     public function executes(): void
     {
-        $event = new OuterEvent('foo_event', ['foo' => 'payload']);
+        $event = new OuterEvent('foo_event', ['foo' => 'payload'], time());
 
         /** @var Transport|MockObject $transport */
         $transport = $this->getMockBuilder(Transport::class)->getMock();

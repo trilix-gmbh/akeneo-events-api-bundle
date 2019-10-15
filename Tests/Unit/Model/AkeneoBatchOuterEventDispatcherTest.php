@@ -53,7 +53,7 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
             ->with('deliver_outer_event_to_consumer')->will($this->returnValue(new JobInstance()));
         $this->jobLauncher->expects($this->never())->method('launch');
 
-        $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar']);
+        $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar'], time());
 
         $this->dispatcher->dispatch($outerEvent);
     }
@@ -70,7 +70,7 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
             ->with('deliver_outer_event_to_consumer')->will($this->returnValue(null));
         $this->jobLauncher->expects($this->never())->method('launch');
 
-        $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar']);
+        $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar'], time());
 
         $this->dispatcher->dispatch($outerEvent);
     }
@@ -89,10 +89,15 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
         $this->jobInstanceRepository->expects($this->once())->method('findOneByIdentifier')
             ->with('deliver_outer_event_to_consumer')->will($this->returnValue($jobInstance));
 
-        $outerEvent = new OuterEvent('foo', ['foo' => 'bar']);
+        $eventTime = time();
+        $outerEvent = new OuterEvent('foo', ['foo' => 'bar'], $eventTime);
 
         $this->jobLauncher->expects($this->once())->method('launch')
-            ->with($jobInstance, $user, ['outer_event' => ['event_type' => 'foo', 'payload' => ['foo' => 'bar']]]);
+            ->with(
+                $jobInstance,
+                $user,
+                ['outer_event' => ['event_type' => 'foo', 'payload' => ['foo' => 'bar'], 'event_time' => $eventTime]]
+            );
 
         $this->dispatcher->dispatch($outerEvent);
     }

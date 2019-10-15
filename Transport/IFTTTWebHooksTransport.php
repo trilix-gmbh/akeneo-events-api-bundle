@@ -40,7 +40,7 @@ class IFTTTWebHooksTransport implements Transport
      */
     public function deliver(OuterEvent $event): void
     {
-        $requestUrl = str_replace('{event}', $event->getEventType(), $this->requestUrl);
+        $requestUrl = str_replace('{event}', $event->eventType(), $this->requestUrl);
         $client = $this->httpClientFactory->create($requestUrl);
         $request = $this->requestFactory->create(
             'POST',
@@ -48,8 +48,8 @@ class IFTTTWebHooksTransport implements Transport
             ['Content-Type' => 'application/json'],
             json_encode(
                 [
-                    'value1' => $event->getEventType(),
-                    'value2' => $event->getPayload()
+                    'value1' => $event->eventType(),
+                    'value2' => $event->payload()
                 ]
             )
         );
