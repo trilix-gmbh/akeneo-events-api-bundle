@@ -148,7 +148,7 @@ class EventsHandlerTest extends TestCase
 
         $payload = ['foo' => 'bar'];
         $eventType = new EventType('test_outer_event', $payload);
-        $outerEvent = new OuterEvent('test_outer_event', ['foo' => 'bar']);
+        $outerEvent = new OuterEvent('test_outer_event', ['foo' => 'bar'], time());
 
         $this->resolver->expects($this->once())->method('__invoke')
             ->with($event)->will($this->returnValue($eventType));

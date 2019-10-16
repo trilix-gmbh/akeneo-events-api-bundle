@@ -7,6 +7,7 @@ namespace Trilix\EventsApiBundle\Model;
 use Akeneo\Tool\Bundle\BatchBundle\Launcher\JobLauncherInterface;
 use Akeneo\Tool\Component\StorageUtils\Repository\IdentifiableObjectRepositoryInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Trilix\EventsApiBundle\Job\JobParameters\DeliverOuterEventConstraintCollectionProvider;
 use Trilix\EventsApiBundle\OuterEvent\OuterEvent;
 
 class AkeneoBatchOuterEventDispatcher implements OuterEventDispatcherInterface
@@ -51,7 +52,7 @@ class AkeneoBatchOuterEventDispatcher implements OuterEventDispatcherInterface
             ->launch(
                 $jobInstance,
                 $token->getUser(),
-                ['event' => $event]
+                [DeliverOuterEventConstraintCollectionProvider::JOB_PARAMETER_KEY_OUTER_EVENT => $event->toArray()]
             );
     }
 }

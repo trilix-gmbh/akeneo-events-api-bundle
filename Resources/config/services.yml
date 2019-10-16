@@ -1,13 +1,15 @@
 parameters:
     pim_events_api.event_subscriber.akeneo_storage_utils_subscriber.class: Trilix\EventsApiBundle\EventSubscriber\AkeneoStorageUtilsSubscriber
-    pim_events_api.events_api_application_provider.default.class: Trilix\EventsApiBundle\Model\DefaultEventsApiApplicationProvider
     pim_events_api.events_handler.class: Trilix\EventsApiBundle\Model\EventsHandler
     pim_events_api.outer_event_builder.class: Trilix\EventsApiBundle\OuterEvent\OuterEventBuilder
     pim_events_api.create_event_type_payload.class: Trilix\EventsApiBundle\Model\CreateEventTypePayload
     pim_events_api.resolve_event_type.class: Trilix\EventsApiBundle\Model\ResolveEventType
     pim_events_api.event_type_configuration_list.class: Trilix\EventsApiBundle\Model\EventTypeConfigurationList
     pim_events_api.akeneo_batch_outer_event_dispatcher.class: Trilix\EventsApiBundle\Model\AkeneoBatchOuterEventDispatcher
-    pim_events_api.guzzle.http_client_factory.class: Trilix\EventsApiBundle\Guzzle\HttpClientFactory
+    pim_events_api.guzzle.http_client_factory.class: Trilix\EventsApiBundle\Guzzle\GuzzleHttpClientFactory
+    pim_events_api.guzzle.request_factory.class: Trilix\EventsApiBundle\Guzzle\GuzzleRequestFactory
+    pim_events_api.transport_factory.http.class: Trilix\EventsApiBundle\Transport\HttpTransportFactory
+    pim_events_api.transport_factory.iftt_webhooks.class: Trilix\EventsApiBundle\Transport\IFTTTWebHooksTransportFactory
 
 services:
     pim_events_api.akeneo_batch_outer_event_dispatcher:
@@ -25,13 +27,11 @@ services:
         tags:
             - { name: kernel.event_subscriber, priority: -255 }
 
-    pim_events_api.events_api_application_provider.default:
-        class: '%pim_events_api.events_api_application_provider.default.class%'
-        arguments:
-            - '%trilix_events_api.default.uri%'
-
     pim_events_api.guzzle.http_client_factory:
         class: '%pim_events_api.guzzle.http_client_factory.class%'
+
+    pim_events_api.guzzle.request_factory:
+        class: '%pim_events_api.guzzle.request_factory.class%'
 
     pim_events_api.events_handler:
         class: '%pim_events_api.events_handler.class%'
@@ -56,3 +56,15 @@ services:
 
     pim_events_api.event_type_configuration_list:
         class: '%pim_events_api.event_type_configuration_list.class%'
+
+    pim_events_api.transport_factory.http:
+        class: '%pim_events_api.transport_factory.http.class%'
+        arguments:
+            - '@pim_events_api.guzzle.http_client_factory'
+            - '@pim_events_api.guzzle.request_factory'
+
+    pim_events_api.transport_factory.ifttt_webhooks:
+        class: '%pim_events_api.transport_factory.iftt_webhooks.class%'
+        arguments:
+            - '@pim_events_api.guzzle.http_client_factory'
+            - '@pim_events_api.guzzle.request_factory'

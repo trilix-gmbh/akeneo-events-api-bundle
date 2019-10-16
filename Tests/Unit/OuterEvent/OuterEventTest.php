@@ -14,30 +14,71 @@ class OuterEventTest extends TestCase
      */
     public function objectInitialization(): void
     {
-        $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar']);
+        $eventTime = time();
+        $event = new OuterEvent('foo_bar_event', ['foo' => 'bar'], $eventTime);
 
-        $this->assertEquals('foo_bar_event', $outerEvent->getType());
-        $this->assertEquals(['foo' => 'bar'], $outerEvent->getPayload());
+        $this->assertSame('foo_bar_event', $event->eventType());
+        $this->assertSame(['foo' => 'bar'], $event->payload());
+        $this->assertSame($eventTime, $event->eventTime());
     }
 
     /**
      * @test
      */
-    public function outerEventSerializesIntoJson(): void
+    public function convertsToArray(): void
     {
-        $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar']);
+        $eventTime = time();
+        $event = new OuterEvent('foo_event', ['foo' => 'payload'], $eventTime);
 
-        $actualJson = json_encode($outerEvent);
+        $this->assertSame(
+            [
+                'event_type' => 'foo_event',
+                'payload' => ['foo' => 'payload'],
+                'event_time' => $eventTime
+            ],
+            $event->toArray()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function beingSerializedIntoJson(): void
+    {
+        $eventTime = time();
+        $event = new OuterEvent('foo_bar_event', ['foo' => 'bar'], $eventTime);
+
+        $actualJson = json_encode($event);
 
         $this->assertJson($actualJson);
         $this->assertJsonStringEqualsJsonString(
             json_encode(
                 [
                     'event_type' => 'foo_bar_event',
-                    'payload' => ['foo' => 'bar']
+                    'payload' => ['foo' => 'bar'],
+                    'event_time' => $eventTime
                 ]
             ),
             $actualJson
         );
+    }
+
+    /**
+     * @test
+     */
+    public function beingCreatedFromArray(): void
+    {
+        $eventTime = time();
+        $event = OuterEvent::fromArray(
+            [
+                'event_type' => 'foo',
+                'payload' => ['foo' => 'payload'],
+                'event_time' => $eventTime
+            ]
+        );
+
+        $this->assertSame('foo', $event->eventType());
+        $this->assertSame(['foo' => 'payload'], $event->payload());
+        $this->assertSame($eventTime, $event->eventTime());
     }
 }

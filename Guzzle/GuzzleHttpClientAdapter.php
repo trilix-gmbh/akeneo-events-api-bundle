@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Trilix\EventsApiBundle\Guzzle;
 
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Uri;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Trilix\EventsApiBundle\HttpClient\Exception as HttpClientException;
-use Trilix\EventsApiBundle\HttpClient\HttpClientInterface;
 
-class HttpClientAdapter implements HttpClientInterface
+class GuzzleHttpClientAdapter implements ClientInterface
 {
     /** @var \GuzzleHttp\ClientInterface */
     private $guzzleHttpClient;
@@ -27,14 +26,14 @@ class HttpClientAdapter implements HttpClientInterface
 
     /**
      * {@inheritdoc}
+     * @throws HttpClientException
      */
-    public function send(string $body, array $options = []): ResponseInterface
+    public function sendRequest(RequestInterface $request): ResponseInterface
     {
         try {
-            $request = new Request('POST', new Uri(), ['Content-Type' => 'application/json'], $body);
-            return $this->guzzleHttpClient->send($request, $options);
-        } catch (GuzzleException $ge) {
-            throw new HttpClientException($ge->getMessage(), $ge->getCode(), $ge);
+            return $this->guzzleHttpClient->send($request);
+        } catch (GuzzleException $e) {
+            throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
         }
     }
 }

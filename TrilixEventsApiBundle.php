@@ -4,7 +4,7 @@ namespace Trilix\EventsApiBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Trilix\EventsApiBundle\DependencyInjection\Compiler\RegisterEventTypesPass;
+use Trilix\EventsApiBundle\DependencyInjection\Compiler\RegisterEventTypeConfigurationsPass;
 
 class TrilixEventsApiBundle extends Bundle
 {
@@ -13,6 +13,6 @@ class TrilixEventsApiBundle extends Bundle
      */
     public function build(ContainerBuilder $container): void
     {
-        $container->addCompilerPass(new RegisterEventTypesPass());
+        $container->addCompilerPass(new RegisterEventTypeConfigurationsPass());
     }
 }

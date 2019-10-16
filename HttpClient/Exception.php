@@ -2,6 +2,9 @@
 
 namespace Trilix\EventsApiBundle\HttpClient;
 
-class Exception extends \RuntimeException
+use Psr\Http\Client\ClientExceptionInterface;
+use RuntimeException;
+
+class Exception extends RuntimeException implements ClientExceptionInterface
 {
 }
