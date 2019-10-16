@@ -20,7 +20,7 @@ All you need is PIM Events API Bundle and an endpoint where to send Akeneo PIM e
 Install via composer:
 
 ```bash
-php composer.phar require trilix/akeneo-events-api-bundle:^0.4.0-dev
+php composer.phar require trilix/akeneo-events-api-bundle:^0.4.0
 ```
 
 To enable the bundle add to the *app/AppKernel.php* file in the registerProjectBundles() method:
