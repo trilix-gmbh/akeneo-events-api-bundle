@@ -52,7 +52,13 @@ trilix_events_api:
 Run the following command to create a job to deliver events to consumer:
 
 ```bash
-bin/console akeneo:batch:create-job 'Deliver outer event to consumer' deliver_outer_event_to_consumer internal deliver_outer_event_to_consumer
+php bin/console akeneo:batch:create-job 'Deliver outer event to consumer' deliver_outer_event_to_consumer internal deliver_outer_event_to_consumer
+```
+
+Clear cache:
+
+```bash
+php bin/console cache:clear --env=prod
 ```
 
 Make sure Akeneo job queue daemon is running. For more information read [Setting up the job queue daemon](https://docs.akeneo.com/latest/install_pim/manual/daemon_queue.html#setting-up-the-job-queue-daemon).
