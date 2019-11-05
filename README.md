@@ -6,7 +6,6 @@ All you need is PIM Events API Bundle and an endpoint where to send Akeneo PIM e
 ## Table of contents
 * [Getting Started](#Getting-Started)
 * [Functionality](#Functionality)
-* [Roadmap](#Roadmap)
 * [License](#License)
 
 ## Getting Started
@@ -20,7 +19,7 @@ All you need is PIM Events API Bundle and an endpoint where to send Akeneo PIM e
 Install via composer:
 
 ```bash
-php composer.phar require trilix/akeneo-events-api-bundle:^0.4.0
+php composer.phar require trilix/akeneo-events-api-bundle:^0.5.0
 ```
 
 To enable the bundle add to the *app/AppKernel.php* file in the registerProjectBundles() method:
@@ -35,18 +34,19 @@ $bundles = [
 Add the following line at the end of *app/config/parameters.yml*:
 
 ```yaml
-default_events_api_app_uri: 'endpoint_url'
+events_api_request_url: 'endpoint_url'
 ```
 
-where `endpoint_url` is an endpoint url of consumer which accepts events from Akeneo PIM.
+where `endpoint_url` is an endpoint url of a consumer which accepts events from Akeneo PIM.
 
 Add the following lines at the end of *app/config/config.yml*:
 
 ```yaml
 trilix_events_api:
-    applications:
-        default:
-            uri: "%default_events_api_app_uri%"
+    transport:
+        factory: "pim_events_api.transport_factory.http"
+        options:
+            request_url: "%events_api_request_url%"
 ```
 
 Run the following command to create a job to deliver events to consumer:
@@ -64,72 +64,56 @@ bin/console akeneo:batch:create-job 'Deliver outer event to consumer' deliver_ou
 * Akeneo PIM Events API Bundle uses separate job to deliver events to consumer
 * The sending of events happens in real-time
 
-### Supported Event Types
+### Event types delivered over Events API
 
-* **Category**
-    * Create
-    * Update
-    * Delete
-* **Attribute**   
-    * Create
-    * Update
-    * Delete
-* **Family**   
-    * Create
-    * Update
-    * Delete
-* **Product**   
-    * Create
-    * Update
-    * Delete
-* **Product Model**   
-    * Create
-    * Update
-    * Delete
+| **Event** | **Description** |
+| --------------------- |:----------------------------------:|
+| category_created      | New category was created           |
+| category_updated      | Existing category was updated      |
+| category_deleted      | Existing category was deleted      |
+| attribute_created     | New attribute was created          |
+| attribute_updated     | Existing attribute was updated     |
+| attribute_deleted     | Existing attribute was deleted     |
+| family_created        | New family was created             |
+| family_updated        | Existing family was updated        |
+| family_created        | Existing family was deleted        |
+| product_created       | New product was created            |
+| product_updated       | Existing product was updated       |
+| product_deleted       | Existing product was deleted       |
+| product_model_created | New product model was created      |
+| product_model_updated | Existing product model was updated |
+| product_model_deleted | Existing product model was deleted |
 
-### Example of delivered event
+### Example of *category_updated* event
 
 ```json
 {
-  "event": {
-    "payload": {
-      "code": "cameras",
-      "labels": {
-        "de_DE": "Cameras new name",
-        "en_US": "Cameras",
-        "fr_FR": "Caméras"
-      },
-      "parent": "master"
+  "event_type": "category_updated",
+  "payload": {
+    "code": "cameras",
+    "labels": {
+      "de_DE": "Cameras",
+      "en_US": "Cameras new name",
+      "fr_FR": "Caméras"
     },
-    "event_type": "category_updated"
-  }
+    "parent": "master"
+  },
+  "event_time": 1565021907
 }
 ```
 
-#### Event Structure
+#### Event Type Structure
 
-| Field        | Description                                                             |
-| ------------ |:-----------------------------------------------------------------------:| 
-| *event_type* | Type of event which happened (see [Event Types](#Supported-event-types))| 
-| *payload*    | Contains information which represents the event                         |  
+| Field        | Type | Description                                                                                 |
+| ------------ |:-------:|:----------------------------------------------------------------------------------------:|
+| *event_type* | String  | Type of event which happened (see [event types](#Event types delivered over Events API)) |
+| *payload*    | Object  | Contains information which represents the event                                          |
+| *event_time* | Integer | Timestamp in seconds when the event was created                                          |
 
 ### Attention :heavy_exclamation_mark:
 
 If Akeneo family contains variants, then during family update (or it's variants as well),
-Akeneo will re-save related products. It will trigger sending *Products Update* events.   
-
-## Roadmap
-
-* Possibility to select event types to subscribe   
-* URL Verification Handshake
-* Support for Multiple endpoints
-* Rate limiting
-* Support for Akeneo Enterprise event types
-* Custom events
-    * Import 
-    * Export
-    * Mass edit
-    * etc
+Akeneo will re-save related products. It will trigger sending *product_updated* events.
 
 ## License
 
