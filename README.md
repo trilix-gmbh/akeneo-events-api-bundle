@@ -61,10 +61,10 @@ Make sure Akeneo job queue daemon is running. For more information read [Setting
 
 ### How it works
 
-* Some event(s) happens in Akeneo PIM. This triggers a mechanism to send those event(s) to a consumer
-* Consumer receives a JSON payload which specifies event (the same data format like Akeneo PIM API uses)
-* Akeneo PIM Events API Bundle uses separate job to deliver events to consumer
-* The sending of events happens in real-time
+Some event(s) happens in Akeneo PIM. This triggers a mechanism to send those event(s) as HTTP POST request to your Request URL.
+Each request contains event, with correspondent [event type](#Event-types-delivered-over-Events-API) presented in JSON format (see [example](#Example-of-*category_updated*-event)).
+
+Events API sends one request per one event, and sending of requests happens in real-time.
 
 ### Event types delivered over Events API
 
@@ -104,7 +104,7 @@ Make sure Akeneo job queue daemon is running. For more information read [Setting
 }
 ```
 
-#### Event Type Structure
+### Event Type Structure
 
 | Field        | Type | Description                                                                                 |
 | ------------ |:-------:|:----------------------------------------------------------------------------------------:|
