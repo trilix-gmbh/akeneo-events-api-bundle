@@ -34,10 +34,10 @@ $bundles = [
 Add the following line at the end of *app/config/parameters.yml*:
 
 ```yaml
-events_api_request_url: 'endpoint_url'
+events_api_request_url: 'your_request_url'
 ```
 
-where `endpoint_url` is an endpoint url of a consumer which accepts events from Akeneo PIM.
+where `your_request_url` is a target location where all the events (see [event types](#Event-types-delivered-over-Events-API)) will be delivered.
 
 Add the following lines at the end of *app/config/config.yml*:
 
@@ -54,6 +54,8 @@ Run the following command to create a job to deliver events to consumer:
 ```bash
 bin/console akeneo:batch:create-job 'Deliver outer event to consumer' deliver_outer_event_to_consumer internal deliver_outer_event_to_consumer
 ```
+
+Make sure Akeneo job queue daemon is running. For more information read [Setting up the job queue daemon](https://docs.akeneo.com/latest/install_pim/manual/daemon_queue.html#setting-up-the-job-queue-daemon).
 
 ## Functionality
 
@@ -106,7 +108,7 @@ bin/console akeneo:batch:create-job 'Deliver outer event to consumer' deliver_ou
 
 | Field        | Type | Description                                                                                 |
 | ------------ |:-------:|:----------------------------------------------------------------------------------------:|
-| *event_type* | String  | Type of event which happened (see [event types](#Event types delivered over Events API)) |
+| *event_type* | String  | Type of event which happened (see [event types](#Event-types-delivered-over-Events-API)) |
 | *payload*    | Object  | Contains information which represents the event                                          |
 | *event_time* | Integer | Timestamp in seconds when the event was created                                          |
 
