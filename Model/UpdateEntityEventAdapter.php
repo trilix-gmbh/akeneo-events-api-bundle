@@ -10,17 +10,17 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 class UpdateEntityEventAdapter extends GenericEvent implements GenericUpdateEntityEventInterface
 {
     /**
-     * UpdateGenericEventAdapter constructor.
-     * @param $subject
+     * UpdateEntityEventAdapter constructor.
+     * @param object $subject
      */
-    public function __construct($subject)
+    private function __construct(object $subject)
     {
-        Assert::that($subject)->isObject();
         parent::__construct($subject);
     }
 
     public static function createFromGenericEvent(GenericEvent $genericEvent): self
     {
+        Assert::that($genericEvent->getSubject())->isObject();
         return new self($genericEvent->getSubject());
     }
 }

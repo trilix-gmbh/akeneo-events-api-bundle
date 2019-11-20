@@ -11,17 +11,17 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 class RemoveEntityEventAdapter extends GenericEvent implements GenericRemoveEntityEventInterface
 {
     /**
-     * RemoveEventAdapter constructor.
-     * @param $subject
+     * RemoveEntityEventAdapter constructor.
+     * @param object $subject
      */
-    public function __construct($subject)
+    private function __construct(object $subject)
     {
-        Assert::that($subject)->isObject();
         parent::__construct($subject);
     }
 
     public static function createFromRemoveEvent(RemoveEvent $removeEvent): self
     {
+        Assert::that($removeEvent->getSubject())->isObject();
         return new self($removeEvent->getSubject());
     }
 }
