@@ -24,19 +24,19 @@ class IFTTTWebHooksTransportTest extends TestCase
         $requestUrl = 'https://iftt.com/a/b/{event}/x/y';
 
         /** @var ClientInterface|MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(ClientInterface::class)->getMock();
-        $request = $this->getMockBuilder(RequestInterface::class)->getMock();
+        $httpClient = $this->createMock(ClientInterface::class);
+        $request = $this->createMock(RequestInterface::class);
         /** @var HttpClientFactoryInterface|MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(HttpClientFactoryInterface::class)->getMock();
+        $httpClientFactory = $this->createMock(HttpClientFactoryInterface::class);
         /** @var RequestFactoryInterface|MockObject $requestFactory */
-        $requestFactory = $this->getMockBuilder(RequestFactoryInterface::class)->getMock();
+        $requestFactory = $this->createMock(RequestFactoryInterface::class);
 
-        $httpClientFactory->expects($this->once())->method('create')
+        $httpClientFactory->expects(self::once())->method('create')
             ->with('https://iftt.com/a/b/foo_name/x/y')->willReturn($httpClient);
-        $requestFactory->expects($this->once())->method('create')
+        $requestFactory->expects(self::once())->method('create')
             ->with('POST', '', ['Content-Type' => 'application/json'], json_encode(['value1' => 'foo_name', 'value2' => ['foo' => 'payload']]))
             ->willReturn($request);
-        $httpClient->expects($this->once())->method('sendRequest')->with($request);
+        $httpClient->expects(self::once())->method('sendRequest')->with($request);
 
         $transport = new IFTTTWebHooksTransport($requestUrl, $httpClientFactory, $requestFactory);
 

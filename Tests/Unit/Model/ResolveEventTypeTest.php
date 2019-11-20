@@ -40,7 +40,7 @@ class ResolveEventTypeTest extends TestCase
                 }
             );
 
-        $this->assertNull($eventType);
+        self::assertNull($eventType);
     }
 
     /**
@@ -76,10 +76,10 @@ class ResolveEventTypeTest extends TestCase
                 }
             );
 
-        $this->assertSame('bar', $eventType->getName());
-        $this->assertNotEmpty($eventType->getPayload());
-        $this->assertArrayHasKey('bar', $eventType->getPayload());
-        $this->assertSame('is_supported', $eventType->getPayload()['bar']);
+        self::assertSame('bar', $eventType->getName());
+        self::assertNotEmpty($eventType->getPayload());
+        self::assertArrayHasKey('bar', $eventType->getPayload());
+        self::assertSame('is_supported', $eventType->getPayload()['bar']);
     }
 
 
@@ -116,10 +116,10 @@ class ResolveEventTypeTest extends TestCase
                 }
             );
 
-        $this->assertSame('foo', $eventType->getName());
-        $this->assertNotEmpty($eventType->getPayload());
-        $this->assertArrayHasKey('foo', $eventType->getPayload());
-        $this->assertSame('is_supported', $eventType->getPayload()['foo']);
+        self::assertSame('foo', $eventType->getName());
+        self::assertNotEmpty($eventType->getPayload());
+        self::assertArrayHasKey('foo', $eventType->getPayload());
+        self::assertSame('is_supported', $eventType->getPayload()['foo']);
     }
 }
 

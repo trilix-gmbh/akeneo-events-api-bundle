@@ -26,9 +26,9 @@ class IFTTTWebHooksTransportFactoryTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         /** @var HttpClientFactoryInterface|MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(HttpClientFactoryInterface::class)->getMock();
+        $httpClientFactory = $this->createMock(HttpClientFactoryInterface::class);
         /** @var RequestFactoryInterface|MockObject $requestFactory */
-        $requestFactory = $this->getMockBuilder(RequestFactoryInterface::class)->getMock();
+        $requestFactory = $this->createMock(RequestFactoryInterface::class);
         $factory = new IFTTTWebHooksTransportFactory($httpClientFactory, $requestFactory);
 
         $factory->create($options);
@@ -40,15 +40,15 @@ class IFTTTWebHooksTransportFactoryTest extends TestCase
     public function createsIFTTTWebHooksTransport(): void
     {
         /** @var HttpClientFactoryInterface|MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(HttpClientFactoryInterface::class)->getMock();
+        $httpClientFactory = $this->createMock(HttpClientFactoryInterface::class);
         /** @var RequestFactoryInterface|MockObject $requestFactory */
-        $requestFactory = $this->getMockBuilder(RequestFactoryInterface::class)->getMock();
+        $requestFactory = $this->createMock(RequestFactoryInterface::class);
 
         $factory = new IFTTTWebHooksTransportFactory($httpClientFactory, $requestFactory);
 
         $transport = $factory->create(['request_url' => self::IFTTT_WEBHOOKS_REQUEST_URL]);
 
-        $this->assertInstanceOf(IFTTTWebHooksTransport::class, $transport);
+        self::assertInstanceOf(IFTTTWebHooksTransport::class, $transport);
     }
 
     public function invalidOptionsDataProvider(): array

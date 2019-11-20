@@ -23,8 +23,8 @@ class DeliverOuterEventTaskletTest extends TestCase
         $event = new OuterEvent('foo_event', ['foo' => 'payload'], time());
 
         /** @var Transport|MockObject $transport */
-        $transport = $this->getMockBuilder(Transport::class)->getMock();
-        $transport->expects($this->once())->method('deliver')
+        $transport = $this->createMock(Transport::class);
+        $transport->expects(self::once())->method('deliver')
             ->with($event);
 
         $tasklet = new DeliverOuterEventTasklet($transport);

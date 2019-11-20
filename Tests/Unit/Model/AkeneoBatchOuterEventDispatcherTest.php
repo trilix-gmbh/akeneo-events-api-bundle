@@ -32,9 +32,9 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
-        $this->jobInstanceRepository = $this->getMockBuilder(IdentifiableObjectRepositoryInterface::class)->getMock();
-        $this->jobLauncher = $this->getMockBuilder(JobLauncherInterface::class)->getMock();
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $this->jobInstanceRepository = $this->createMock(IdentifiableObjectRepositoryInterface::class);
+        $this->jobLauncher = $this->createMock(JobLauncherInterface::class);
 
         $this->dispatcher = new AkeneoBatchOuterEventDispatcher(
             $this->tokenStorage,
@@ -48,10 +48,10 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
      */
     public function notLaunchesJobIfTokenIsMissing(): void
     {
-        $this->tokenStorage->expects($this->once())->method('getToken')->will($this->returnValue(null));
-        $this->jobInstanceRepository->expects($this->once())->method('findOneByIdentifier')
-            ->with('deliver_outer_event_to_consumer')->will($this->returnValue(new JobInstance()));
-        $this->jobLauncher->expects($this->never())->method('launch');
+        $this->tokenStorage->expects(self::once())->method('getToken')->willReturn(null);
+        $this->jobInstanceRepository->expects(self::once())->method('findOneByIdentifier')
+            ->with('deliver_outer_event_to_consumer')->willReturn(new JobInstance());
+        $this->jobLauncher->expects(self::never())->method('launch');
 
         $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar'], time());
 
@@ -63,12 +63,12 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
      */
     public function notLaunchesJobIfJobInstanceIsNotSetup(): void
     {
-        $token = $this->getMockBuilder(TokenInterface::class)->getMock();
+        $token = $this->createMock(TokenInterface::class);
 
-        $this->tokenStorage->expects($this->once())->method('getToken')->will($this->returnValue($token));
-        $this->jobInstanceRepository->expects($this->once())->method('findOneByIdentifier')
-            ->with('deliver_outer_event_to_consumer')->will($this->returnValue(null));
-        $this->jobLauncher->expects($this->never())->method('launch');
+        $this->tokenStorage->expects(self::once())->method('getToken')->willReturn($token);
+        $this->jobInstanceRepository->expects(self::once())->method('findOneByIdentifier')
+            ->with('deliver_outer_event_to_consumer')->willReturn(null);
+        $this->jobLauncher->expects(self::never())->method('launch');
 
         $outerEvent = new OuterEvent('foo_bar_event', ['foo' => 'bar'], time());
 
@@ -80,19 +80,19 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
      */
     public function launchesJob(): void
     {
-        $user = $this->getMockBuilder(UserInterface::class)->getMock();
-        $token = $this->getMockBuilder(TokenInterface::class)->getMock();
-        $token->expects($this->once())->method('getUser')->will($this->returnValue($user));
+        $user = $this->createMock(UserInterface::class);
+        $token = $this->createMock(TokenInterface::class);
+        $token->expects(self::once())->method('getUser')->willReturn($user);
         $jobInstance = new JobInstance();
 
-        $this->tokenStorage->expects($this->once())->method('getToken')->will($this->returnValue($token));
-        $this->jobInstanceRepository->expects($this->once())->method('findOneByIdentifier')
-            ->with('deliver_outer_event_to_consumer')->will($this->returnValue($jobInstance));
+        $this->tokenStorage->expects(self::once())->method('getToken')->willReturn($token);
+        $this->jobInstanceRepository->expects(self::once())->method('findOneByIdentifier')
+            ->with('deliver_outer_event_to_consumer')->willReturn($jobInstance);
 
         $eventTime = time();
         $outerEvent = new OuterEvent('foo', ['foo' => 'bar'], $eventTime);
 
-        $this->jobLauncher->expects($this->once())->method('launch')
+        $this->jobLauncher->expects(self::once())->method('launch')
             ->with(
                 $jobInstance,
                 $user,

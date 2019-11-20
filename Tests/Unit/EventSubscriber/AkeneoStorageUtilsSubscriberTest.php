@@ -30,10 +30,9 @@ class AkeneoStorageUtilsSubscriberTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->eventsHandler = $this->getMockBuilder(EventsHandler::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->eventsHandler = $this->createMock(EventsHandler::class);
 
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->subscriber = new AkeneoStorageUtilsSubscriber($this->eventsHandler, $this->logger);
     }
@@ -48,7 +47,7 @@ class AkeneoStorageUtilsSubscriberTest extends TestCase
         $preSaveEvent = new GenericEvent($subject, ['foo' => 'bar']);
         $postSaveEvent = new GenericEvent($subject, ['bar' => 'foo']);
 
-        $this->eventsHandler->expects($this->once())->method('handle')
+        $this->eventsHandler->expects(self::once())->method('handle')
             ->with(
                 $this->logicalAnd(
                     $this->isInstanceOf(GenericCreateEntityEventInterface::class),
@@ -77,7 +76,7 @@ class AkeneoStorageUtilsSubscriberTest extends TestCase
         $preSaveEvent = new GenericEvent($subject, ['foo' => 'bar']);
         $postSaveEvent = new GenericEvent($subject, ['bar' => 'foo']);
 
-        $this->eventsHandler->expects($this->once())->method('handle')
+        $this->eventsHandler->expects(self::once())->method('handle')
             ->with(
                 $this->logicalAnd(
                     $this->isInstanceOf(GenericUpdateEntityEventInterface::class),
@@ -100,7 +99,7 @@ class AkeneoStorageUtilsSubscriberTest extends TestCase
     {
         $subject = new VersionableObject(7);
 
-        $this->eventsHandler->expects($this->once())->method('handle')
+        $this->eventsHandler->expects(self::once())->method('handle')
             ->with(
                 $this->logicalAnd(
                     $this->isInstanceOf(GenericRemoveEntityEventInterface::class),
@@ -124,10 +123,10 @@ class AkeneoStorageUtilsSubscriberTest extends TestCase
 
         $postSaveEvent = new GenericEvent($subject, ['bar' => 'foo']);
 
-        $this->eventsHandler->expects($this->once())->method('handle')
+        $this->eventsHandler->expects(self::once())->method('handle')
             ->willThrowException(new \Exception('testMessage'));
 
-        $this->logger->expects($this->once())
+        $this->logger->expects(self::once())
             ->method('error')
             ->with('testMessage');
 
@@ -141,10 +140,10 @@ class AkeneoStorageUtilsSubscriberTest extends TestCase
     {
         $subject = new VersionableObject(7);
 
-        $this->eventsHandler->expects($this->once())->method('handle')
+        $this->eventsHandler->expects(self::once())->method('handle')
             ->willThrowException(new \Exception('testMessage'));
 
-        $this->logger->expects($this->once())
+        $this->logger->expects(self::once())
             ->method('error')
             ->with('testMessage');
 

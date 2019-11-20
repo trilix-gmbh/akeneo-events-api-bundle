@@ -23,19 +23,19 @@ class HttpTransportTest extends TestCase
         $outerEvent = new OuterEvent('foo_event', ['foo' => 'payload'], time());
 
         /** @var ClientInterface|MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(ClientInterface::class)->getMock();
-        $request = $this->getMockBuilder(RequestInterface::class)->getMock();
+        $httpClient = $this->createMock(ClientInterface::class);
+        $request = $this->createMock(RequestInterface::class);
         /** @var HttpClientFactoryInterface|MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(HttpClientFactoryInterface::class)->getMock();
+        $httpClientFactory = $this->createMock(HttpClientFactoryInterface::class);
         /** @var RequestFactoryInterface|MockObject $requestFactory */
-        $requestFactory = $this->getMockBuilder(RequestFactoryInterface::class)->getMock();
+        $requestFactory = $this->createMock(RequestFactoryInterface::class);
 
-        $httpClientFactory->expects($this->once())->method('create')
+        $httpClientFactory->expects(self::once())->method('create')
             ->with('http://localhost:1234')->willReturn($httpClient);
-        $requestFactory->expects($this->once())->method('create')
+        $requestFactory->expects(self::once())->method('create')
             ->with('POST', '', ['Content-Type' => 'application/json'], json_encode($outerEvent))
             ->willReturn($request);
-        $httpClient->expects($this->once())->method('sendRequest')->with($request);
+        $httpClient->expects(self::once())->method('sendRequest')->with($request);
 
         $httpTransport = new HttpTransport('http://localhost:1234', $httpClientFactory, $requestFactory);
 

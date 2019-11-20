@@ -19,10 +19,10 @@ class GuzzleRequestFactoryTest extends TestCase
 
         $request = $factory->create('POST', '', ['bar' => 'foo'], 'foo_bar');
 
-        $this->assertInstanceOf(RequestInterface::class, $request);
-        $this->assertSame('POST', $request->getMethod());
-        $this->assertContains('foo', $request->getHeader('bar'));
-        $this->assertSame('', $request->getUri()->getPath());
-        $this->assertSame('foo_bar', $request->getBody()->getContents());
+        self::assertInstanceOf(RequestInterface::class, $request);
+        self::assertSame('POST', $request->getMethod());
+        self::assertContains('foo', $request->getHeader('bar'));
+        self::assertSame('', $request->getUri()->getPath());
+        self::assertSame('foo_bar', $request->getBody()->getContents());
     }
 }

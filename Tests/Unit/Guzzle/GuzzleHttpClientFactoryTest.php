@@ -32,7 +32,7 @@ class GuzzleHttpClientFactoryTest extends TestCase
         $factory = new GuzzleHttpClientFactory();
         $client = $factory->create('http://127.0.0.1');
 
-        $this->assertInstanceOf(GuzzleHttpClientAdapter::class, $client);
+        self::assertInstanceOf(GuzzleHttpClientAdapter::class, $client);
     }
 
     public function baseUriDataProvider(): array

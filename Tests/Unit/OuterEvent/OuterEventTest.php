@@ -17,9 +17,9 @@ class OuterEventTest extends TestCase
         $eventTime = time();
         $event = new OuterEvent('foo_bar_event', ['foo' => 'bar'], $eventTime);
 
-        $this->assertSame('foo_bar_event', $event->eventType());
-        $this->assertSame(['foo' => 'bar'], $event->payload());
-        $this->assertSame($eventTime, $event->eventTime());
+        self::assertSame('foo_bar_event', $event->eventType());
+        self::assertSame(['foo' => 'bar'], $event->payload());
+        self::assertSame($eventTime, $event->eventTime());
     }
 
     /**
@@ -30,7 +30,7 @@ class OuterEventTest extends TestCase
         $eventTime = time();
         $event = new OuterEvent('foo_event', ['foo' => 'payload'], $eventTime);
 
-        $this->assertSame(
+        self::assertSame(
             [
                 'event_type' => 'foo_event',
                 'payload' => ['foo' => 'payload'],
@@ -50,8 +50,8 @@ class OuterEventTest extends TestCase
 
         $actualJson = json_encode($event);
 
-        $this->assertJson($actualJson);
-        $this->assertJsonStringEqualsJsonString(
+        self::assertJson($actualJson);
+        self::assertJsonStringEqualsJsonString(
             json_encode(
                 [
                     'event_type' => 'foo_bar_event',
@@ -77,8 +77,8 @@ class OuterEventTest extends TestCase
             ]
         );
 
-        $this->assertSame('foo', $event->eventType());
-        $this->assertSame(['foo' => 'payload'], $event->payload());
-        $this->assertSame($eventTime, $event->eventTime());
+        self::assertSame('foo', $event->eventType());
+        self::assertSame(['foo' => 'payload'], $event->payload());
+        self::assertSame($eventTime, $event->eventTime());
     }
 }

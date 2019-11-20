@@ -24,9 +24,9 @@ class HttpTransportFactoryTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         /** @var HttpClientFactoryInterface|MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(HttpClientFactoryInterface::class)->getMock();
+        $httpClientFactory = $this->createMock(HttpClientFactoryInterface::class);
         /** @var RequestFactoryInterface|MockObject $requestFactory */
-        $requestFactory = $this->getMockBuilder(RequestFactoryInterface::class)->getMock();
+        $requestFactory = $this->createMock(RequestFactoryInterface::class);
         $factory = new HttpTransportFactory($httpClientFactory, $requestFactory);
 
         $factory->create($options);
@@ -38,14 +38,14 @@ class HttpTransportFactoryTest extends TestCase
     public function createsHttpTransport(): void
     {
         /** @var HttpClientFactoryInterface|MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(HttpClientFactoryInterface::class)->getMock();
+        $httpClientFactory = $this->createMock(HttpClientFactoryInterface::class);
         /** @var RequestFactoryInterface|MockObject $requestFactory */
-        $requestFactory = $this->getMockBuilder(RequestFactoryInterface::class)->getMock();
+        $requestFactory = $this->createMock(RequestFactoryInterface::class);
         $factory = new HttpTransportFactory($httpClientFactory, $requestFactory);
 
         $transport = $factory->create(['request_url' => 'http://foo.bar']);
 
-        $this->assertInstanceOf(HttpTransport::class, $transport);
+        self::assertInstanceOf(HttpTransport::class, $transport);
     }
 
     public function invalidOptionsDataProvider(): array

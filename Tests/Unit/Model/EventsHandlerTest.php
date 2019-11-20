@@ -38,10 +38,10 @@ class EventsHandlerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->resolver = $this->getMockBuilder(ResolveEventType::class)->disableOriginalConstructor()->getMock();
-        $this->builder = $this->getMockBuilder(OuterEventBuilder::class)->disableOriginalConstructor()->getMock();
-        $this->dispatcher = $this->getMockBuilder(OuterEventDispatcherInterface::class)->getMock();
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $this->resolver = $this->createMock(ResolveEventType::class);
+        $this->builder = $this->createMock(OuterEventBuilder::class);
+        $this->dispatcher = $this->createMock(OuterEventDispatcherInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->handler = new EventsHandler($this->resolver, $this->builder, $this->dispatcher, $this->logger);
     }
@@ -75,15 +75,15 @@ class EventsHandlerTest extends TestCase
             }
         };
 
-        $this->resolver->expects($this->once())->method('__invoke')
-            ->with($event)->will($this->returnValue(null));
+        $this->resolver->expects(self::once())->method('__invoke')
+            ->with($event)->willReturn(null);
 
-        $this->builder->expects($this->never())->method('withPayload');
-        $this->builder->expects($this->never())->method('build');
+        $this->builder->expects(self::never())->method('withPayload');
+        $this->builder->expects(self::never())->method('build');
 
-        $this->dispatcher->expects($this->never())->method('dispatch');
+        $this->dispatcher->expects(self::never())->method('dispatch');
 
-        $this->logger->expects($this->never())->method('notice');
+        $this->logger->expects(self::never())->method('notice');
 
         $this->handler->handle($event);
     }
@@ -100,10 +100,10 @@ class EventsHandlerTest extends TestCase
             }
         };
 
-        $this->resolver->expects($this->once())->method('__invoke')
+        $this->resolver->expects(self::once())->method('__invoke')
             ->with($event)->willThrowException(new PayloadCanNotBeCreatedException('testMessage'));
 
-        $this->logger->expects($this->once())
+        $this->logger->expects(self::once())
             ->method('notice')
             ->with('testMessage');
 
@@ -122,13 +122,13 @@ class EventsHandlerTest extends TestCase
             }
         };
 
-        $this->resolver->expects($this->once())->method('__invoke')
+        $this->resolver->expects(self::once())->method('__invoke')
             ->with($event)->willThrowException(new RuntimeException('testMessage'));
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('testMessage');
 
-        $this->logger->expects($this->never())
+        $this->logger->expects(self::never())
             ->method('notice');
 
         $this->handler->handle($event);
@@ -150,17 +150,16 @@ class EventsHandlerTest extends TestCase
         $eventType = new EventType('test_outer_event', $payload);
         $outerEvent = new OuterEvent('test_outer_event', ['foo' => 'bar'], time());
 
-        $this->resolver->expects($this->once())->method('__invoke')
-            ->with($event)->will($this->returnValue($eventType));
+        $this->resolver->expects(self::once())->method('__invoke')->with($event)->willReturn($eventType);
 
-        $this->builder->expects($this->once())->method('withPayload')
+        $this->builder->expects(self::once())->method('withPayload')
             ->with($payload)->willReturnSelf();
-        $this->builder->expects($this->once())->method('build')
-            ->with('test_outer_event')->will($this->returnValue($outerEvent));
+        $this->builder->expects(self::once())->method('build')
+            ->with('test_outer_event')->willReturn($outerEvent);
 
-        $this->dispatcher->expects($this->once())->method('dispatch')->with($outerEvent);
+        $this->dispatcher->expects(self::once())->method('dispatch')->with($outerEvent);
 
-        $this->logger->expects($this->never())
+        $this->logger->expects(self::never())
             ->method('notice');
 
         $this->handler->handle($event);

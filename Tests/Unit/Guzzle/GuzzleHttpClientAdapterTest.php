@@ -24,11 +24,11 @@ class GuzzleHttpClientAdapterTest extends TestCase
         $this->expectException(HttpClientException::class);
 
         /** @var RequestInterface|MockObject $request */
-        $request = $this->getMockBuilder(RequestInterface::class)->getMock();
+        $request = $this->createMock(RequestInterface::class);
 
         /** @var GuzzleHttpClient|MockObject $guzzleClient */
-        $guzzleClient = $this->getMockBuilder(GuzzleHttpClient::class)->getMock();
-        $guzzleClient->expects($this->once())->method('send')
+        $guzzleClient = $this->createMock(GuzzleHttpClient::class);
+        $guzzleClient->expects(self::once())->method('send')
             ->with($request)->willThrowException(new class extends RuntimeException implements GuzzleException {});
 
         $adapter = new GuzzleHttpClientAdapter($guzzleClient);
@@ -41,16 +41,16 @@ class GuzzleHttpClientAdapterTest extends TestCase
     public function guzzleHttpClientSendsGivenRequest(): void
     {
         /** @var RequestInterface|MockObject $request */
-        $request = $this->getMockBuilder(RequestInterface::class)->getMock();
+        $request = $this->createMock(RequestInterface::class);
         /** @var ResponseInterface|MockObject $response */
-        $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
+        $response = $this->createMock(ResponseInterface::class);
 
         /** @var GuzzleHttpClient|MockObject $guzzleClient */
-        $guzzleClient = $this->getMockBuilder(GuzzleHttpClient::class)->getMock();
-        $guzzleClient->expects($this->once())->method('send')
+        $guzzleClient = $this->createMock(GuzzleHttpClient::class);
+        $guzzleClient->expects(self::once())->method('send')
             ->with($request)->willReturn($response);
 
         $adapter = new GuzzleHttpClientAdapter($guzzleClient);
-        $this->assertSame($response, $adapter->sendRequest($request));
+        self::assertSame($response, $adapter->sendRequest($request));
     }
 }

@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Trilix\EventsApiBundle\Model\CreateEventTypePayload;
 use Trilix\EventsApiBundle\Model\GenericEventInterface;
+use Trilix\EventsApiBundle\Model\PayloadCanNotBeCreatedException;
 
 class CreateEventTypePayloadTest extends TestCase
 {
@@ -23,15 +24,16 @@ class CreateEventTypePayloadTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->serializer = $this->getMockBuilder(NormalizerInterface::class)->getMock();
+        $this->serializer = $this->createMock(NormalizerInterface::class);
     }
 
     /**
      * @test
-     * @expectedException \Trilix\EventsApiBundle\Model\PayloadCanNotBeCreatedException
      */
     public function throwsPayloadCanNotBeCreatedExceptionIfEntityCanNotBeSerialized(): void
     {
+        $this->expectException(PayloadCanNotBeCreatedException::class);
+
         $event = new class implements GenericEventInterface {
             public function getSubject()
             {
@@ -39,9 +41,10 @@ class CreateEventTypePayloadTest extends TestCase
             }
 
         };
-        $this->serializer->expects($this->once())->method('normalize')
+        $this->serializer->expects(self::once())->method('normalize')
             ->with($this->isType(IsType::TYPE_OBJECT))
             ->willThrowException(new class extends RuntimeException implements SerializerExceptionInterface {});
+
         (new CreateEventTypePayload($this->serializer))->__invoke($event);
     }
 
@@ -58,11 +61,11 @@ class CreateEventTypePayloadTest extends TestCase
 
         };
         $expectedPayload = ['foo' => 'bar'];
-        $this->serializer->expects($this->once())->method('normalize')
+        $this->serializer->expects(self::once())->method('normalize')
             ->with($this->isType(IsType::TYPE_OBJECT))
             ->willReturn($expectedPayload);
         $actualPayload = (new CreateEventTypePayload($this->serializer))->__invoke($event);
 
-        $this->assertSame($expectedPayload, $actualPayload);
+        self::assertSame($expectedPayload, $actualPayload);
     }
 }
