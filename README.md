@@ -84,7 +84,7 @@ Events API sends one request per one event, and sending of requests happens in r
 | attribute_deleted     | Existing attribute was deleted     |
 | family_created        | New family was created             |
 | family_updated        | Existing family was updated        |
-| family_created        | Existing family was deleted        |
+| family_deleted        | Existing family was deleted        |
 | product_created       | New product was created            |
 | product_updated       | Existing product was updated       |
 | product_deleted       | Existing product was deleted       |
