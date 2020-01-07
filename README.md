@@ -78,19 +78,19 @@ Events API sends one request per one event, and sending of requests happens in r
 | --------------------- |:----------------------------------:|
 | category_created      | New category was created           |
 | category_updated      | Existing category was updated      |
-| category_deleted      | Existing category was deleted      |
+| category_removed      | Existing category was deleted      |
 | attribute_created     | New attribute was created          |
 | attribute_updated     | Existing attribute was updated     |
-| attribute_deleted     | Existing attribute was deleted     |
+| attribute_removed     | Existing attribute was deleted     |
 | family_created        | New family was created             |
 | family_updated        | Existing family was updated        |
-| family_created        | Existing family was deleted        |
+| family_removed        | Existing family was deleted        |
 | product_created       | New product was created            |
 | product_updated       | Existing product was updated       |
-| product_deleted       | Existing product was deleted       |
+| product_removed       | Existing product was deleted       |
 | product_model_created | New product model was created      |
 | product_model_updated | Existing product model was updated |
-| product_model_deleted | Existing product model was deleted |
+| product_model_removed | Existing product model was deleted |
 
 ### Example of *category_updated* event
 
