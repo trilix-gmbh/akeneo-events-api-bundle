@@ -45,10 +45,10 @@ class PimEventTypeConfigurationFactories
     }
 
     /**
-     * @param CreateEventTypePayload $createEventTypePayload
+     * @param CreateDeleteEventTypePayload $createEventTypePayload
      * @return EventTypeConfigurationInterface
      */
-    public static function categoryRemovedEventTypeConfiguration(CreateEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
+    public static function categoryRemovedEventTypeConfiguration(CreateDeleteEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
     {
         return new EventTypeConfiguration(
             EntityEventTypes::CATEGORY_REMOVED,
@@ -90,10 +90,10 @@ class PimEventTypeConfigurationFactories
     }
 
     /**
-     * @param CreateEventTypePayload $createEventTypePayload
+     * @param CreateDeleteEventTypePayload $createEventTypePayload
      * @return EventTypeConfigurationInterface
      */
-    public static function attributeRemovedEventTypeConfiguration(CreateEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
+    public static function attributeRemovedEventTypeConfiguration(CreateDeleteEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
     {
         return new EventTypeConfiguration(
             EntityEventTypes::ATTRIBUTE_REMOVED,
@@ -135,10 +135,10 @@ class PimEventTypeConfigurationFactories
     }
 
     /**
-     * @param CreateEventTypePayload $createEventTypePayload
+     * @param CreateDeleteEventTypePayload $createEventTypePayload
      * @return EventTypeConfigurationInterface
      */
-    public static function familyRemovedEventTypeConfiguration(CreateEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
+    public static function familyRemovedEventTypeConfiguration(CreateDeleteEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
     {
         return new EventTypeConfiguration(
             EntityEventTypes::FAMILY_REMOVED,
@@ -180,10 +180,10 @@ class PimEventTypeConfigurationFactories
     }
 
     /**
-     * @param CreateEventTypePayload $createEventTypePayload
+     * @param CreateDeleteProductEventTypePayload $createEventTypePayload
      * @return EventTypeConfigurationInterface
      */
-    public static function productRemovedEventTypeConfiguration(CreateEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
+    public static function productRemovedEventTypeConfiguration(CreateDeleteProductEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
     {
         return new EventTypeConfiguration(
             EntityEventTypes::PRODUCT_REMOVED,
@@ -225,10 +225,10 @@ class PimEventTypeConfigurationFactories
     }
 
     /**
-     * @param CreateEventTypePayload $createEventTypePayload
+     * @param CreateDeleteEventTypePayload $createEventTypePayload
      * @return EventTypeConfigurationInterface
      */
-    public static function productModelRemovedEventTypeConfiguration(CreateEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
+    public static function productModelRemovedEventTypeConfiguration(CreateDeleteEventTypePayload $createEventTypePayload): EventTypeConfigurationInterface
     {
         return new EventTypeConfiguration(
             EntityEventTypes::PRODUCT_MODEL_REMOVED,

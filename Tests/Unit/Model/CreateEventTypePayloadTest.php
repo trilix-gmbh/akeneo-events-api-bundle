@@ -21,7 +21,10 @@ class CreateEventTypePayloadTest extends TestCase
     /** @var SerializerInterface|NormalizerInterface|MockObject */
     private $serializer;
 
-    protected function setUp()
+    /**
+     * @throws \ReflectionException
+     */
+    protected function setUp(): void
     {
         parent::setUp();
         $this->serializer = $this->createMock(NormalizerInterface::class);

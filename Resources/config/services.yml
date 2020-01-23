@@ -3,6 +3,8 @@ parameters:
     pim_events_api.events_handler.class: Trilix\EventsApiBundle\Model\EventsHandler
     pim_events_api.outer_event_builder.class: Trilix\EventsApiBundle\OuterEvent\OuterEventBuilder
     pim_events_api.create_event_type_payload.class: Trilix\EventsApiBundle\Model\CreateEventTypePayload
+    pim_events_api.create_delete_product_event_type_payload.class: Trilix\EventsApiBundle\Model\CreateDeleteProductEventTypePayload
+    pim_events_api.create_delete_event_type_payload.class: Trilix\EventsApiBundle\Model\CreateDeleteEventTypePayload
     pim_events_api.resolve_event_type.class: Trilix\EventsApiBundle\Model\ResolveEventType
     pim_events_api.event_type_configuration_list.class: Trilix\EventsApiBundle\Model\EventTypeConfigurationList
     pim_events_api.akeneo_batch_outer_event_dispatcher.class: Trilix\EventsApiBundle\Model\AkeneoBatchOuterEventDispatcher
@@ -53,6 +55,12 @@ services:
         class: '%pim_events_api.create_event_type_payload.class%'
         arguments:
             - '@pim_external_api_serializer'
+
+    pim_events_api.create_delete_product_event_type_payload:
+        class: '%pim_events_api.create_delete_product_event_type_payload.class%'
+
+    pim_events_api.create_delete_event_type_payload:
+        class: '%pim_events_api.create_delete_event_type_payload.class%'
 
     pim_events_api.event_type_configuration_list:
         class: '%pim_events_api.event_type_configuration_list.class%'
