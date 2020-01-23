@@ -7,7 +7,7 @@ namespace Trilix\EventsApiBundle\Model;
 use Assert\Assert;
 use Akeneo\Pim\Enrichment\Component\Product\Model\ProductInterface;
 
-class CreateDeleteProductEventTypePayload
+class CreateRemoveProductEventTypePayload
 {
     /**
      * @param GenericEventInterface $event

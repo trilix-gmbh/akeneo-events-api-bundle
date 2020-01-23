@@ -13,7 +13,7 @@ services:
 
     pim_events_api.event_type_configuration.category_removed:
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'categoryRemovedEventTypeConfiguration']
-        arguments: ['@pim_events_api.create_delete_event_type_payload']
+        arguments: ['@pim_events_api.create_remove_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
@@ -31,7 +31,7 @@ services:
 
     pim_events_api.event_type_configuration.attribute_removed:
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'attributeRemovedEventTypeConfiguration']
-        arguments: ['@pim_events_api.create_delete_event_type_payload']
+        arguments: ['@pim_events_api.create_remove_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
@@ -49,7 +49,7 @@ services:
 
     pim_events_api.event_type_configuration.family_removed:
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'familyRemovedEventTypeConfiguration']
-        arguments: ['@pim_events_api.create_delete_event_type_payload']
+        arguments: ['@pim_events_api.create_remove_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
@@ -67,7 +67,7 @@ services:
 
     pim_events_api.event_type_configuration.product_removed:
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'productRemovedEventTypeConfiguration']
-        arguments: ['@pim_events_api.create_delete_product_event_type_payload']
+        arguments: ['@pim_events_api.create_remove_product_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
@@ -85,6 +85,6 @@ services:
 
     pim_events_api.event_type_configuration.product_model_removed:
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'productModelRemovedEventTypeConfiguration']
-        arguments: ['@pim_events_api.create_delete_event_type_payload']
+        arguments: ['@pim_events_api.create_remove_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }

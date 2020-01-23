@@ -12,17 +12,17 @@ use Akeneo\Pim\Structure\Component\Model\Family;
 use Akeneo\Pim\Enrichment\Component\Product\Model\ProductModel;
 use Akeneo\Pim\Enrichment\Component\Product\Model\Product;
 use Akeneo\Pim\Enrichment\Component\Product\Value\ScalarValue;
-use Trilix\EventsApiBundle\Model\CreateDeleteProductEventTypePayload;
+use Trilix\EventsApiBundle\Model\CreateRemoveProductEventTypePayload;
 use Trilix\EventsApiBundle\Model\GenericRemoveEntityEventInterface;
 
-class CreateDeleteProductEventTypePayloadTest extends TestCase
+class CreateRemoveProductEventTypePayloadTest extends TestCase
 {
     /**
      * @test
      */
     public function createsPayload(): void
     {
-        $deleteProductEvent = new class implements GenericRemoveEntityEventInterface {
+        $removeProductEvent = new class implements GenericRemoveEntityEventInterface {
             public function getSubject(): Product
             {
                 return (new Product())->setIdentifier(ScalarValue::value('sku', 'test-123'));
@@ -31,7 +31,7 @@ class CreateDeleteProductEventTypePayloadTest extends TestCase
 
         $expectedPayload = ['identifier' => 'test-123'];
 
-        $actualPayload = (new CreateDeleteProductEventTypePayload())->__invoke($deleteProductEvent);
+        $actualPayload = (new CreateRemoveProductEventTypePayload())->__invoke($removeProductEvent);
         self::assertSame($expectedPayload, $actualPayload);
     }
 
@@ -45,7 +45,7 @@ class CreateDeleteProductEventTypePayloadTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new CreateDeleteProductEventTypePayload())->__invoke($event);
+        (new CreateRemoveProductEventTypePayload())->__invoke($event);
     }
 
     /**
@@ -53,28 +53,28 @@ class CreateDeleteProductEventTypePayloadTest extends TestCase
      */
     public function notSupportedEventsDataProvider(): array
     {
-        $deleteCategoryEvent = new class implements GenericRemoveEntityEventInterface {
+        $removeCategoryEvent = new class implements GenericRemoveEntityEventInterface {
             public function getSubject(): Category
             {
                 return new Category();
             }
         };
 
-        $deleteAttributeEvent = new class implements GenericRemoveEntityEventInterface {
+        $removeAttributeEvent = new class implements GenericRemoveEntityEventInterface {
             public function getSubject(): Attribute
             {
                 return new Attribute();
             }
         };
 
-        $deleteFamilyEvent = new class implements GenericRemoveEntityEventInterface {
+        $removeFamilyEvent = new class implements GenericRemoveEntityEventInterface {
             public function getSubject(): Family
             {
                 return new Family();
             }
         };
 
-        $deleteProductModelEvent = new class implements GenericRemoveEntityEventInterface {
+        $removeProductModelEvent = new class implements GenericRemoveEntityEventInterface {
             public function getSubject(): ProductModel
             {
                 return new ProductModel();
@@ -82,10 +82,10 @@ class CreateDeleteProductEventTypePayloadTest extends TestCase
         };
 
         return [
-            [$deleteCategoryEvent],
-            [$deleteAttributeEvent],
-            [$deleteFamilyEvent],
-            [$deleteProductModelEvent]
+            [$removeCategoryEvent],
+            [$removeAttributeEvent],
+            [$removeFamilyEvent],
+            [$removeProductModelEvent]
         ];
     }
 }

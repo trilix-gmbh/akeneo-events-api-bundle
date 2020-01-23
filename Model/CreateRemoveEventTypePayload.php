@@ -10,7 +10,7 @@ use Akeneo\Pim\Enrichment\Component\Product\Model\ProductModelInterface;
 use Akeneo\Pim\Structure\Component\Model\AttributeInterface;
 use Akeneo\Pim\Structure\Component\Model\FamilyInterface;
 
-class CreateDeleteEventTypePayload
+class CreateRemoveEventTypePayload
 {
     /**
      * @param GenericEventInterface $event
