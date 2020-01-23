@@ -109,13 +109,23 @@ Events API sends one request per one event, and sending of requests happens in r
   "event_time": 1565021907
 }
 ```
+### Example of *product_model_removed* event
+```json
+{
+  "event_type": "product_model_removed",
+  "payload": {
+    "code": "derby"
+  },
+  "event_time": 1579792377
+}
+```
 
 ### Event Type Structure
 
 | Field        | Type | Description                                                                                 |
 | ------------ |:-------:|:----------------------------------------------------------------------------------------:|
 | *event_type* | String  | Type of event which happened (see [event types](#Event-types-delivered-over-Events-API)) |
-| *payload*    | Object  | Contains information which represents the event                                          |
+| *payload*    | Object  | Contains information which represents the event. For events related to deletion of entity it contains entity only identifier (identifier value for Products and code for all others) |
 | *event_time* | Integer | Timestamp in seconds when the event was created                                          |
 
 ### Attention :heavy_exclamation_mark:
