@@ -93,6 +93,13 @@ class OuterEvent implements JsonSerializable
         Assert::that($array['payload'])->isArray();
         Assert::that($array['event_time'])->integer();
 
-        return new self($array['event_type'], $array['payload'], $array['event_time']);
+        $payload = array_map(static function($element) {
+            if ((is_array($element)) && empty($element)) {
+                return (object) $element;
+            }
+            return $element;
+        }, $array['payload']);
+
+        return new self($array['event_type'], $payload, $array['event_time']);
     }
 }

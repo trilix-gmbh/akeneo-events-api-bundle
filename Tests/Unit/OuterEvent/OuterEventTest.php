@@ -72,13 +72,15 @@ class OuterEventTest extends TestCase
         $event = OuterEvent::fromArray(
             [
                 'event_type' => 'foo',
-                'payload' => ['foo' => 'payload'],
+                'payload' => ['foo' => 'payload', 'empty_values' => []],
                 'event_time' => $eventTime
             ]
         );
 
         self::assertSame('foo', $event->eventType());
-        self::assertSame(['foo' => 'payload'], $event->payload());
+        self::assertSame('payload', $event->payload()['foo']);
+        self::assertIsObject($event->payload()['empty_values']);
+        self::assertInstanceOf(\stdClass::class, $event->payload()['empty_values']);
         self::assertSame($eventTime, $event->eventTime());
     }
 }

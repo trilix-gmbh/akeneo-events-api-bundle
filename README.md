@@ -92,21 +92,32 @@ Events API sends one request per one event, and sending of requests happens in r
 | product_model_updated | Existing product model was updated |
 | product_model_deleted | Existing product model was deleted |
 
-### Example of *category_updated* event
+### Example of *family_updated* event
 
 ```json
 {
-  "event_type": "category_updated",
-  "payload": {
-    "code": "cameras",
-    "labels": {
-      "de_DE": "Cameras",
-      "en_US": "Cameras new name",
-      "fr_FR": "Caméras"
+   "event_type": "family_updated",
+    "payload": {
+      "code": "test_family",
+      "labels": {},
+      "attributes": [
+        "sku"
+      ],
+      "attribute_as_image": null,
+      "attribute_as_label": "sku",
+      "attribute_requirements": {
+        "print": [
+          "sku"
+        ],
+        "mobile": [
+          "sku"
+        ],
+        "ecommerce": [
+          "sku"
+        ]
+      }
     },
-    "parent": "master"
-  },
-  "event_time": 1565021907
+    "event_time": 1579865355
 }
 ```
 
