@@ -29,7 +29,10 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
     /** @var AkeneoBatchOuterEventDispatcher */
     private $dispatcher;
 
-    protected function setUp()
+    /**
+     * @throws \ReflectionException
+     */
+    protected function setUp(): void
     {
         parent::setUp();
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
@@ -77,6 +80,7 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
 
     /**
      * @test
+     * @throws \ReflectionException
      */
     public function launchesJob(): void
     {

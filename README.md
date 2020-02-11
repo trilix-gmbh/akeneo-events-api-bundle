@@ -78,19 +78,19 @@ Events API sends one request per one event, and sending of requests happens in r
 | --------------------- |:----------------------------------:|
 | category_created      | New category was created           |
 | category_updated      | Existing category was updated      |
-| category_deleted      | Existing category was deleted      |
+| category_removed      | Existing category was deleted      |
 | attribute_created     | New attribute was created          |
 | attribute_updated     | Existing attribute was updated     |
-| attribute_deleted     | Existing attribute was deleted     |
+| attribute_removed     | Existing attribute was deleted     |
 | family_created        | New family was created             |
 | family_updated        | Existing family was updated        |
-| family_created        | Existing family was deleted        |
+| family_removed        | Existing family was deleted        |
 | product_created       | New product was created            |
 | product_updated       | Existing product was updated       |
-| product_deleted       | Existing product was deleted       |
+| product_removed       | Existing product was deleted       |
 | product_model_created | New product model was created      |
 | product_model_updated | Existing product model was updated |
-| product_model_deleted | Existing product model was deleted |
+| product_model_removed | Existing product model was deleted |
 
 ### Example of *category_updated* event
 
@@ -109,13 +109,23 @@ Events API sends one request per one event, and sending of requests happens in r
   "event_time": 1565021907
 }
 ```
+### Example of *product_model_removed* event
+```json
+{
+  "event_type": "product_model_removed",
+  "payload": {
+    "code": "derby"
+  },
+  "event_time": 1579792377
+}
+```
 
 ### Event Type Structure
 
 | Field        | Type | Description                                                                                 |
 | ------------ |:-------:|:----------------------------------------------------------------------------------------:|
 | *event_type* | String  | Type of event which happened (see [event types](#Event-types-delivered-over-Events-API)) |
-| *payload*    | Object  | Contains information which represents the event                                          |
+| *payload*    | Object  | Contains information which represents the event. For events related to deletion of entity it contains entity only identifier (identifier value for Products and code for all others) |
 | *event_time* | Integer | Timestamp in seconds when the event was created                                          |
 
 ### Attention :heavy_exclamation_mark:
