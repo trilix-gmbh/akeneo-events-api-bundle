@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Trilix\EventsApiBundle\Tests\Unit\Model;
 
+use Akeneo\Pim\Enrichment\Component\Product\Model\ProductInterface;
 use PHPUnit\Framework\TestCase;
 use Assert\InvalidArgumentException;
 use Akeneo\Pim\Enrichment\Component\Category\Model\Category;
@@ -11,7 +12,6 @@ use Akeneo\Pim\Structure\Component\Model\Attribute;
 use Akeneo\Pim\Structure\Component\Model\Family;
 use Akeneo\Pim\Enrichment\Component\Product\Model\ProductModel;
 use Akeneo\Pim\Enrichment\Component\Product\Model\Product;
-use Akeneo\Pim\Enrichment\Component\Product\Value\ScalarValue;
 use Trilix\EventsApiBundle\Model\CreateRemoveProductEventTypePayload;
 use Trilix\EventsApiBundle\Model\GenericRemoveEntityEventInterface;
 
@@ -23,9 +23,9 @@ class CreateRemoveProductEventTypePayloadTest extends TestCase
     public function createsPayload(): void
     {
         $removeProductEvent = new class implements GenericRemoveEntityEventInterface {
-            public function getSubject(): Product
+            public function getSubject(): ProductInterface
             {
-                return (new Product())->setIdentifier(ScalarValue::value('sku', 'test-123'));
+                return (new Product())->setIdentifier('test-123');
             }
         };
 
