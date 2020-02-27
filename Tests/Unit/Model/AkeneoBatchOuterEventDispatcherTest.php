@@ -29,6 +29,9 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
     /** @var AkeneoBatchOuterEventDispatcher */
     private $dispatcher;
 
+    /**
+     * @throws \ReflectionException
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -77,6 +80,7 @@ class AkeneoBatchOuterEventDispatcherTest extends TestCase
 
     /**
      * @test
+     * @throws \ReflectionException
      */
     public function launchesJob(): void
     {

@@ -27,6 +27,9 @@ class AkeneoStorageUtilsSubscriberTest extends TestCase
     /** @var LoggerInterface|MockObject */
     private $logger;
 
+    /**
+     * @throws \ReflectionException
+     */
     protected function setUp(): void
     {
         parent::setUp();
