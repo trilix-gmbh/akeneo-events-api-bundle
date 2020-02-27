@@ -27,7 +27,7 @@ class AkeneoStorageUtilsSubscriberTest extends TestCase
     /** @var LoggerInterface|MockObject */
     private $logger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->eventsHandler = $this->createMock(EventsHandler::class);

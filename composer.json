@@ -3,22 +3,22 @@
     "type": "symfony-bundle",
     "description": "Akeneo PIM Events API Bundle",
     "keywords": ["Akeneo", "PIM", "Events", "API"],
-    "homepage": "http://www.trilix.co",
+    "homepage": "https://www.trilix.co",
     "license": "MIT",
     "authors": [
         {
             "name": "Trilix GmbH",
-            "homepage": "http://www.trilix.co"
+            "homepage": "https://www.trilix.co"
         }
     ],
     "require": {
-        "akeneo/pim-community-dev": "^3.0.0",
+        "akeneo/pim-community-dev": "^4.0",
         "beberlei/assert": "^3.2",
         "psr/http-client": "^1",
         "guzzlehttp/guzzle": "~6.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7"
+        "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "psr-4": { "Trilix\\EventsApiBundle\\": "./" }

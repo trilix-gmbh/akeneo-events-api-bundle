@@ -1,89 +1,104 @@
 services:
     pim_events_api.event_type_configuration.category_created:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'categoryCreatedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.category_updated:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'categoryUpdatedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.category_removed:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'categoryRemovedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.attribute_created:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'attributeCreatedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.attribute_updated:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'attributeUpdatedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.attribute_removed:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'attributeRemovedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.family_created:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'familyCreatedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.family_updated:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'familyUpdatedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.family_removed:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'familyRemovedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.product_created:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'productCreatedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.product_updated:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'productUpdatedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.product_removed:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'productRemovedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.product_model_created:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'productModelCreatedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.product_model_updated:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'productModelUpdatedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
             - { name: 'pim_events_api.event_type_configuration' }
 
     pim_events_api.event_type_configuration.product_model_removed:
+        class: Trilix\EventsApiBundle\EventType\EventTypeConfiguration
         factory: ['Trilix\EventsApiBundle\Model\PimEventTypeConfigurationFactories', 'productModelRemovedEventTypeConfiguration']
         arguments: ['@pim_events_api.create_event_type_payload']
         tags:
