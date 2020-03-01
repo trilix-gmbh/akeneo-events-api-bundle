@@ -12,53 +12,53 @@ All you need is PIM Events API Bundle and an endpoint where to send Akeneo PIM e
 
 ### Requirements
 
-* Akeneo PIM >= 3.0 (CE & EE)
+* Akeneo PIM >= 4.0 (CE & EE)
 
 ### Installation
 
 Install via composer:
 
 ```bash
-php composer.phar require trilix/akeneo-events-api-bundle:^0.5.0
+php composer.phar require trilix/akeneo-events-api-bundle:^0.6.0
 ```
 
-To enable the bundle add to the *app/AppKernel.php* file in the registerProjectBundles() method:
+To enable the bundle add to the *config/bundles.php* file:
 
 ```php
-$bundles = [
+return [
     // ...
-    new \Trilix\EventsApiBundle\TrilixEventsApiBundle(),
+    Trilix\EventsApiBundle\TrilixEventsApiBundle::class => ['all' => true]
 ]
 ```
 
-Add the following line at the end of *app/config/parameters.yml*:
+Add the following line at the end of env file:
 
 ```yaml
-events_api_request_url: 'your_request_url'
+EVENTS_API_REQUEST_URL=your_request_url
 ```
 
 where `your_request_url` is a target location where all the events (see [event types](#Event-types-delivered-over-Events-API)) will be delivered.
 
-Add the following lines at the end of *app/config/config.yml*:
+Create file *config/packages/trilix_events_api.yml* with the following:
 
 ```yaml
 trilix_events_api:
     transport:
         factory: "pim_events_api.transport_factory.http"
         options:
-            request_url: "%events_api_request_url%"
-```
-
-Run the following command to create a job to deliver events to consumer:
-
-```bash
-php bin/console akeneo:batch:create-job 'Deliver outer event to consumer' deliver_outer_event_to_consumer internal deliver_outer_event_to_consumer
+            request_url: "%env(EVENTS_API_REQUEST_URL)%"
 ```
 
 Clear cache:
 
 ```bash
 php bin/console cache:clear --env=prod
+```
+
+Run the following command to create a job to deliver events to consumer:
+
+```bash
+php bin/console akeneo:batch:create-job 'Deliver outer event to consumer' deliver_outer_event_to_consumer internal deliver_outer_event_to_consumer
 ```
 
 Make sure Akeneo job queue daemon is running. For more information read [Setting up the job queue daemon](https://docs.akeneo.com/latest/install_pim/manual/daemon_queue.html#setting-up-the-job-queue-daemon).
