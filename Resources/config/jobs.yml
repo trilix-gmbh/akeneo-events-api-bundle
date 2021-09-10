@@ -45,7 +45,5 @@ services:
                 - '@pim_events_api.step.deliver_outer_event'
         public: false
         tags:
-            -
-                name: akeneo_batch.job
-                connector: '%pim_events_api.deliver_outer_event_to_consumer.connector_name%'
-                type: '%pim_events_api.deliver_outer_event_to_consumer.job_type%'
+            - { name: akeneo_batch.job, connector: '%pim_events_api.deliver_outer_event_to_consumer.connector_name%', type: '%pim_events_api.deliver_outer_event_to_consumer.job_type%' }
+            - name: akeneo_batch.job.not_visible
